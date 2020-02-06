@@ -6,15 +6,6 @@
           <van-dropdown-item v-model="value" :options="option" @change="changeItem" />
         </van-dropdown-menu>
       </van-col>
-      <van-col span="6">
-          <van-button
-            style="position:absolute;top:10px;right:20px"
-            icon="add-o"
-            size="small"
-            type="info"
-            @click="onClickRight"
-          >新增</van-button>
-      </van-col>
     </van-row>
 
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
@@ -91,9 +82,8 @@ export default {
   mounted: function() {
     dd.ready(function() {
       dd.biz.navigation.setTitle({
-        title: "建议提报" //控制标题文本，空字符串表示显示默认文本
+        title: "建议评分" //控制标题文本，空字符串表示显示默认文本
       });
-      dd.ui.webViewBounce.disable();
     });
   },
   provide() {
@@ -104,10 +94,11 @@ export default {
   data() {
     return {
       value: "全部建议",
-      ny: "2020/02",
       option: [
         { text: "全部建议", value: "全部建议" },
-        { text: "参评建议", value: "参评建议" }
+        { text: "未评建议", value: "未评建议" },
+        { text: "已评建议", value: "已评建议" }
+  
       ],
       newIcon: require("../assets/logo.png"),
       isRouterAlive: true,
@@ -145,12 +136,9 @@ export default {
     },
 
     open(item) {
-       this.$router.push({ path: "/addadvice" , query: {'id':item,'title':'编辑测试','message':'测试内容很多在这不一一展示了'}});
+       this.$router.push({ path: "/rate" , query: {'id':item,'title':'编辑测试','message':'测试内容很多在这不一一展示了'}});
     },
 
-    onClickRight() {
-      this.$router.push({ path: "/addadvice", });
-    },
     onLoad() {
       setTimeout(() => {
         if (this.refreshing) {
@@ -171,9 +159,7 @@ export default {
     onRefresh() {
       // 清空列表数据
       this.finished = false;
-
       // 重新加载数据
-      // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
       this.onLoad();
     }
