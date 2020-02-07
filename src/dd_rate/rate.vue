@@ -16,6 +16,21 @@
         show-word-limit
         @blur="viewDefault"
       />
+      <!-- <van-divider>督办</van-divider> -->
+      <van-field
+        v-model="dept"
+        required
+        label="主办单位"
+        placeholder="请选择主办单位"
+        readonly
+      />
+      <van-field v-model="depts" label="协办单位" placeholder="请选择协办单位" readonly  />
+      <van-field
+        v-model="deptuser"
+        label="分管领导"
+        placeholder="请选择分管领导"
+        readonly
+      />
     </van-cell-group>
     <van-notice-bar
       wrapable
@@ -34,8 +49,8 @@
         @touchstart.native.stop="show = true"
       />   
       <van-number-keyboard v-model="value" :show="show" :maxlength="1" @blur="show = false" /> -->
-      <van-cell title="建议打分">
-        <van-stepper slot="default" v-model="fs1" step="1" :min="minValue" :max="maxValue" autofocus="true" />
+      <van-cell title="建议评价">
+        <van-stepper slot="default" v-model="fs1" step="1" :min="minValue" :max="maxValue" autofocus="true" input-width="80px"   />
       </van-cell>
       <van-slider
         v-model="fs1"
@@ -50,7 +65,7 @@
       style="  margin-top: 15px;margin-right:20px"
       @click="btnTask"
     >落实情况</van-button>
-    <van-button type="info" size="small" style="  margin-top: 15px" @click="btnConfirm">提交打分</van-button>
+    <van-button type="info" size="small" style="margin-top: 15px" @click="btnConfirm">提交打分</van-button>
   </div>
 </template>
 <script>
@@ -100,9 +115,13 @@ export default {
       title: "",
       message: "",
       id: "",
-      fs1: "",
+      fs1: "4",
       minValue: 0,
-      maxValue: 5
+      maxValue: 5,
+      dept: "大数据中心",
+      deptsid: "",
+      depts: "办公室;通防处",
+      deptuser: "陆永生"
     };
   },
   methods: {
