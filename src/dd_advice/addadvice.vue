@@ -18,6 +18,13 @@
       />
     </van-cell-group>
 
+    <van-button
+      v-if="id"
+      type="primary"
+      size="small"
+      style="  margin-top: 15px;margin-right:20px"
+      @click="btnRate"
+    >参评</van-button>
     <van-button type="info" size="small" style="  margin-top: 15px" @click="btnConfirm">保存</van-button>
     <van-button
       v-if="id"
@@ -29,7 +36,7 @@
   </div>
 </template>
 <script>
-import { NavBar, Toast, Button, Field, Cell, CellGroup } from "vant";
+import { NavBar, Toast, Button, Field, Cell, CellGroup, Dialog } from "vant";
 
 import Vue from "vue";
 
@@ -38,21 +45,19 @@ Vue.use(Button)
   .use(Toast)
   .use(Field)
   .use(Cell)
-  .use(CellGroup);
+  .use(CellGroup)
+  .use(Dialog);
 
 export default {
   mounted: function() {
-    
     this.id = this.$route.query.id;
-
     if (this.id != undefined) {
-        this.title=this.$route.query.title;
-        this.message=this.$route.query.message;
-    
+      this.title = this.$route.query.title;
+      this.message = this.$route.query.message;
     } else {
       this.$nextTick(function() {
         this.$refs.inputVal.focus();
-      });
+      }, 500);
     }
   },
   data() {
@@ -77,6 +82,19 @@ export default {
     btnDelete() {
       Toast.success("删除成功");
       this.$router.go(-1);
+    },
+    btnRate() {
+      Dialog.confirm({
+        title: "提示",
+        message: "确认是否将本条建议进行参评？"
+      })
+        .then(() => {
+          Toast.success("参评成功");
+          this.$router.go(-1);
+        })
+        .catch(() => {
+          // on cancel
+        });
     }
   }
 };

@@ -3,10 +3,10 @@
   <div id="rate">
     <van-cell-group>
       <van-field value="大数据中心" readonly label="提报单位" />
-      <van-field v-model="title" required label="建议标题" placeholder="请输入建议标题" ref="inputVal" />
+      <van-field v-model="title" readonly label="建议标题" placeholder="请输入建议标题" ref="inputVal" />
       <van-field
         v-model="message"
-        required
+        readonly
         rows="4"
         autosize
         label="建议内容"
@@ -22,11 +22,20 @@
       :scrollable="false"
       color="#1989fa"
       background="#ecf9ff"
-    >6-8很差 9-11较差 12-14合格 15-17良好 18-20优秀</van-notice-bar>
+    >1很差 2较差 3合格 4良好 5优秀</van-notice-bar>
     <van-cell-group style=" margin:20px;   text-align: left;margin-top:0px ">
-      <van-cell title="建议价值型">
-        <!-- 使用 right-icon 插槽来自定义右侧图标 -->
-        <van-stepper slot="default" v-model="fs1" step="1" :min="minValue" :max="maxValue" />
+      <!-- <van-field
+        type="digit"
+        v-model="value"
+        label="建议评分"
+        input-align="right"
+        autofocus="true"
+        readonly="readonly"
+        @touchstart.native.stop="show = true"
+      />   
+      <van-number-keyboard v-model="value" :show="show" :maxlength="1" @blur="show = false" /> -->
+      <van-cell title="建议打分">
+        <van-stepper slot="default" v-model="fs1" step="1" :min="minValue" :max="maxValue" autofocus="true" />
       </van-cell>
       <van-slider
         v-model="fs1"
@@ -34,29 +43,14 @@
         :max="maxValue"
         style=" margin-left: 20px;margin-right: 20px;margin-top:5px;margin-bottom:5px "
       ></van-slider>
-      <van-cell title="建议可落地" style="margin-top:15px">
-        <!-- 使用 right-icon 插槽来自定义右侧图标 -->
-        <van-stepper slot="default" v-model="fs2" step="1" :min="minValue" :max="maxValue" />
-      </van-cell>
-      <van-slider
-        v-model="fs2"
-        :min="minValue"
-        :max="maxValue"
-        style=" margin-left: 20px;margin-right: 20px;margin-top:5px; "
-      ></van-slider>
-      <van-cell title="建议创新性" style="margin-top:15px">
-        <!-- 使用 right-icon 插槽来自定义右侧图标 -->
-        <van-stepper slot="default" v-model="fs3" step="1" :min="minValue" :max="maxValue" />
-      </van-cell>
-      <van-slider
-        v-model="fs3"
-        :min="minValue"
-        :max="maxValue"
-        style=" margin-left: 20px;margin-right: 20px;margin-top:5px;margin-bottom:5px "
-      ></van-slider>
     </van-cell-group>
-
-    <van-button type="info" size="small" style="  margin-top: 15px" @click="btnConfirm">保存</van-button>
+    <van-button
+      type="primary"
+      size="small"
+      style="  margin-top: 15px;margin-right:20px"
+      @click="btnTask"
+    >落实情况</van-button>
+    <van-button type="info" size="small" style="  margin-top: 15px" @click="btnConfirm">提交打分</van-button>
   </div>
 </template>
 <script>
@@ -69,7 +63,8 @@ import {
   CellGroup,
   Slider,
   Stepper,
-  NoticeBar
+  NoticeBar,
+  NumberKeyboard
 } from "vant";
 import Vue from "vue";
 
@@ -81,7 +76,8 @@ Vue.use(Button)
   .use(CellGroup)
   .use(Slider)
   .use(Stepper)
-  .use(NoticeBar);
+  .use(NoticeBar)
+  .use(NumberKeyboard);
 
 export default {
   mounted: function() {
@@ -98,15 +94,15 @@ export default {
   },
   data() {
     return {
+      value:"",
+      show: false,
       phone: "18605498606",
       title: "",
       message: "",
       id: "",
-      fs1: 6,
-      fs2: 6,
-      fs3: 6,
-      minValue: 6,
-      maxValue: 20
+      fs1: "",
+      minValue: 0,
+      maxValue: 5
     };
   },
   methods: {
@@ -119,6 +115,9 @@ export default {
     btnConfirm() {
       Toast.success("保存成功");
       this.$router.go(-1);
+    },
+    btnTask() {
+      Toast("打开任务详情界面");
     }
   }
 };

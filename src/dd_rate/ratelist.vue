@@ -1,12 +1,19 @@
 <template>
   <div id="advicelist">
-    <van-row>
-      <van-col span="6">
-        <van-dropdown-menu>
-          <van-dropdown-item v-model="value" :options="option" @change="changeItem" />
-        </van-dropdown-menu>
-      </van-col>
-    </van-row>
+    <van-dropdown-menu>
+      <van-dropdown-item v-model="value" :options="option" @change="changeItem" />
+      <van-dropdown-item title="筛选" ref="item" style="text-align: center;">
+        <van-field v-model="ny" label="选择日期" readonly="readonly" @click="showPicker" />
+        <van-row>
+          <van-col span="12">
+            <van-button block type="primary" @click="onCancel">重置</van-button>
+          </van-col>
+          <van-col span="12">
+            <van-button block type="info" @click="onConfirm">确认</van-button>
+          </van-col>
+        </van-row>
+      </van-dropdown-item>
+    </van-dropdown-menu>
 
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
@@ -17,12 +24,11 @@
           title="关于大数据中心房屋123123"
           desc="大数据中心 2020-02-05阿斯顿发的发撒旦法打发的发的富士达富士达富士达富士达范德萨富士达富士达富士达"
           :icon="newIcon"
-        >
-        </van-panel>
+        ></van-panel>
       </van-list>
     </van-pull-refresh>
 
-    <van-popup v-model="showPicker" position="bottom">
+    <!-- <van-popup v-model="showPicker" position="bottom">
       <van-datetime-picker
         v-model="currentDate"
         type="year-month"
@@ -32,7 +38,7 @@
         @cancel="showPicker = false"
         @confirm="onNYConfirm"
       />
-    </van-popup>
+    </van-popup>-->
   </div>
 </template>
 
@@ -58,6 +64,7 @@ import {
 } from "vant";
 import Vue from "vue";
 import * as dd from "dingtalk-jsapi";
+import dateutil from "../util/date";
 
 Vue.use(NavBar)
   .use(Toast)
@@ -80,6 +87,7 @@ Vue.use(NavBar)
 
 export default {
   mounted: function() {
+    this.currentDate = dateutil.formatTime("", "YYYY-MM");
     dd.ready(function() {
       dd.biz.navigation.setTitle({
         title: "建议评分" //控制标题文本，空字符串表示显示默认文本
@@ -98,7 +106,6 @@ export default {
         { text: "全部建议", value: "全部建议" },
         { text: "未评建议", value: "未评建议" },
         { text: "已评建议", value: "已评建议" }
-  
       ],
       newIcon: require("../assets/logo.png"),
       isRouterAlive: true,
@@ -106,13 +113,20 @@ export default {
       loading: false,
       finished: false,
       refreshing: false,
-      showPicker: false,
-      minDate: new Date(2020, 0, 1),
-      maxDate: new Date(2025, 10, 1),
-      currentDate: new Date()
+      currentDate: "",
+      ny: ""
     };
   },
   methods: {
+    showPicker() {
+      let _this = this;
+      dd.biz.util.datepicker({
+        format: "yyyy-MM", //注意：format只支持android系统规范，即2015-03-31格式为yyyy-MM-dd
+        onSuccess: function(result) {
+          _this.ny = result.value;
+        }
+      });
+    },
     formatter(type, val) {
       if (type === "year") {
         return `${val}年`;
@@ -121,22 +135,31 @@ export default {
       }
       return val;
     },
-    onNYConfirm(value) {
-      this.ny = value;
-      this.showPicker = false;
-    },
+
     changeItem() {
       Toast.loading({
         message: this.value,
         forbidClick: true
       });
     },
+    onCancel() {
+      this.ny = "";
+      this.onConfirm();
+    },
     onConfirm() {
       this.$refs.item.toggle();
+      this.onRefresh();
     },
 
     open(item) {
-       this.$router.push({ path: "/rate" , query: {'id':item,'title':'编辑测试','message':'测试内容很多在这不一一展示了'}});
+      this.$router.push({
+        path: "/rate",
+        query: {
+          id: item,
+          title: "编辑测试",
+          message: "测试内容很多在这不一一展示了"
+        }
+      });
     },
 
     onLoad() {
@@ -154,12 +177,12 @@ export default {
         if (this.list.length >= 40) {
           this.finished = true;
         }
-      }, 1000);
+      }, 500);
     },
     onRefresh() {
       // 清空列表数据
+      this.refreshing = true;
       this.finished = false;
-      // 重新加载数据
       this.loading = true;
       this.onLoad();
     }

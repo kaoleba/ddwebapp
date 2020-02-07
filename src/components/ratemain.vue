@@ -3,9 +3,8 @@
   <div id="app">
     <router-view />
     <van-tabbar route>
-      <van-tabbar-item replace to="/main/advicelist" icon="todo-list-o">建议提报</van-tabbar-item>
-      <van-tabbar-item replace to="/main/ratelist" icon="sign">建议评分</van-tabbar-item>
-      <van-tabbar-item replace to="/main/gridmain" icon="chart-trending-o">统计查询</van-tabbar-item>
+      <van-tabbar-item replace to="/ratemain/ratelist" icon="sign">建议评分</van-tabbar-item>
+      <van-tabbar-item replace to="/ratemain/rategridmain" icon="chart-trending-o">统计查询</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
@@ -22,7 +21,7 @@ export default {
   mounted: function() {
     dd.ready(function() {
       dd.biz.navigation.setTitle({
-        title: "建议提报"
+        title: "建议评分"
       });
       dd.ui.webViewBounce.disable();
     });
