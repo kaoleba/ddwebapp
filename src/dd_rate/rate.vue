@@ -66,7 +66,8 @@ import {
   Slider,
   Stepper,
   NoticeBar,
-  NumberKeyboard
+  NumberKeyboard,
+  Dialog
 } from "vant";
 import Vue from "vue";
 import axios from "axios";
@@ -81,7 +82,8 @@ Vue.use(Button)
   .use(Slider)
   .use(Stepper)
   .use(NoticeBar)
-  .use(NumberKeyboard);
+  .use(NumberKeyboard)
+  .use(Dialog);
 
 export default {
   mounted: function() {
