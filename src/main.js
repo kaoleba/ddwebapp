@@ -3,7 +3,10 @@ import App from './App.vue'
 import FastClick from 'fastclick'
 import { router } from './router';
 import 'amfe-flexible';
+import globalVue from './global'
 
+
+Vue.prototype.global = globalVue;
 Vue.config.productionTip = false
 
 FastClick.prototype.focus = function (targetElement) {
@@ -18,7 +21,6 @@ FastClick.prototype.focus = function (targetElement) {
 };
 
 FastClick.attach(document.body)
-
 
 new Vue({
   router: router,

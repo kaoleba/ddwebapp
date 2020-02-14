@@ -1,3 +1,5 @@
+
+
 //获取当前时间戳
 function getTimeStamp() {
     return new Date().getTime();

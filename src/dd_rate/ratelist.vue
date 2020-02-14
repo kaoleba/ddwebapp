@@ -1,7 +1,7 @@
 <template>
   <div id="advicelist">
     <van-dropdown-menu>
-      <van-dropdown-item v-model="value" :options="option" @change="changeItem" />
+      <van-dropdown-item v-model="statevalue" :options="option" @change="changeItem" />
       <van-dropdown-item title="筛选" ref="item" style="text-align: center;">
         <van-field v-model="ny" label="选择日期" readonly="readonly" @click="showPicker" />
         <van-row>
@@ -20,25 +20,19 @@
         <van-panel
           @click="open(item)"
           v-for="item in list"
-          :key="item"
-          title="关于大数据中心房屋123123"
-          desc="大数据中心 2020-02-05阿斯顿发的发撒旦法打发的发的富士达富士达富士达富士达范德萨富士达富士达富士达"
+          :key="item.proposal_id"
+          :title="item.proposal_title"
+          :desc="item.proposal_content"
           :icon="newIcon"
-        ></van-panel>
+        >
+          <div style="margin-left:30px;font-size:12px;border:none;  padding: 5px">
+            <van-tag :type="formatType(item.evaluator_id)">{{ formatState(item.evaluator_id)}}</van-tag>
+            <van-tag type="warning">{{ item.proposal_dept}}</van-tag>
+            {{formatDate(item.create_time)}}
+          </div>
+        </van-panel>
       </van-list>
     </van-pull-refresh>
-
-    <!-- <van-popup v-model="showPicker" position="bottom">
-      <van-datetime-picker
-        v-model="currentDate"
-        type="year-month"
-        :min-date="minDate"
-        :max-date="maxDate"
-        :formatter="formatter"
-        @cancel="showPicker = false"
-        @confirm="onNYConfirm"
-      />
-    </van-popup>-->
   </div>
 </template>
 
@@ -60,11 +54,14 @@ import {
   Popup,
   DatetimePicker,
   Col,
-  Row
+  Row,
+  Tag
 } from "vant";
 import Vue from "vue";
 import * as dd from "dingtalk-jsapi";
 import dateutil from "../util/date";
+import utils from "../util/utils";
+import axios from "axios";
 
 Vue.use(NavBar)
   .use(Toast)
@@ -83,9 +80,71 @@ Vue.use(NavBar)
   .use(DatetimePicker)
   .use(dd)
   .use(Col)
-  .use(Row);
+  .use(Row)
+  .use(Tag);
 
 export default {
+  created: function() {
+    if (typeof window.ddUserInfo == "undefined") {
+      let _this = this;
+      Toast.loading({
+        message: "加载中...",
+        forbidClick: true
+      });
+      var jsapiurl =
+        this.global.ddapi + "DD/GetConfig?url=" + this.global.adviceurl;
+      axios
+        .get(jsapiurl)
+        //then获取成功；response成功后的返回值（对象）
+        .then(response => {
+          Toast.clear();
+          var res = response.data.content;
+          dd.ready(function() {
+            setTimeout(function() {
+              dd.config({
+                agentId: _this.global.agentId, // 必填，微应用ID
+                corpId: res.CorpId, //必填，企业ID
+                timeStamp: res.TimeStamp, // 必填，生成签名的时间戳
+                nonceStr: res.NonceStr, // 必填，生成签名的随机串
+                signature: res.Signature, // 必填，签名
+                jsApiList: [
+                  "runtime.info",
+                  "biz.contact.complexPicker",
+                  "biz.contact.departmentsPicker"
+                ] // 必填，需要使用的jsapi列表，注意：不要带dd。
+              });
+              //获取个人信息
+              dd.runtime.permission.requestAuthCode({
+                corpId: res.CorpId, // 企业id
+                onSuccess: function(info) {
+                  var userUrl =
+                    _this.global.ddapi + "DD/GetUserInfo?code=" + info.code;
+                  axios
+                    .get(userUrl)
+                    //then获取成功；response成功后的返回值（对象）
+                    .then(res => {
+                      if (res.data.errorMsg != "") {
+                        utils.AlertError({
+                          "获取钉钉用户信息异常：": res.data.errorMsg
+                        });
+                      } else {
+                        window.ddUserInfo = JSON.parse(res.data.content);
+                        _this.onLoad();
+                      }
+                    })
+                    .catch(error => {
+                      utils.AlertError("获取用户信息失败:" + error);
+                    });
+                }
+              });
+            }, 500);
+          });
+        })
+        .catch(error => {
+          utils.AlertError("访问配置api异常:" + error);
+        });
+    }
+  },
   mounted: function() {
     this.currentDate = dateutil.formatTime("", "YYYY-MM");
     dd.ready(function() {
@@ -101,13 +160,13 @@ export default {
   },
   data() {
     return {
-      value: "全部建议",
+      statevalue: "全部建议",
       option: [
         { text: "全部建议", value: "全部建议" },
         { text: "未评建议", value: "未评建议" },
         { text: "已评建议", value: "已评建议" }
       ],
-      newIcon: require("../assets/logo.png"),
+      newIcon: require("../assets/lk.png"),
       isRouterAlive: true,
       list: [],
       loading: false,
@@ -118,6 +177,21 @@ export default {
     };
   },
   methods: {
+    formatState(state) {
+      if (state == null) return "未评分";
+      return "已评分";
+    },
+    formatType(state) {
+      if (state == null) return "primary";
+      return "success";
+    },
+    formatDate(date) {
+      try {
+        return date.replace("T", " ");
+      } catch {
+        return "";
+      }
+    },
     showPicker() {
       let _this = this;
       dd.biz.util.datepicker({
@@ -137,10 +211,7 @@ export default {
     },
 
     changeItem() {
-      Toast.loading({
-        message: this.value,
-        forbidClick: true
-      });
+      this.onRefresh();
     },
     onCancel() {
       this.ny = "";
@@ -155,29 +226,54 @@ export default {
       this.$router.push({
         path: "/rate",
         query: {
-          id: item,
-          title: "编辑测试",
-          message: "测试内容很多在这不一一展示了"
+          entity: item
         }
       });
     },
 
     onLoad() {
-      setTimeout(() => {
-        if (this.refreshing) {
-          this.list = [];
-          this.refreshing = false;
-        }
+      let _this = this;
 
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1);
-        }
-        this.loading = false;
+      //window.console.log(_this.list);
 
-        if (this.list.length >= 40) {
-          this.finished = true;
-        }
-      }, 500);
+      if (window.ddUserInfo.userid != "") {
+        setTimeout(() => {
+          if (this.refreshing) {
+            this.list = [];
+            this.refreshing = false;
+            this.pageindex = 1;
+          }
+
+          axios
+            .get(_this.global.ddapi + "proposal/GetRateList", {
+              params: {
+                page: _this.pageindex,
+                state: _this.statevalue,
+                ny: _this.ny,
+                evaluator_id: window.ddUserInfo.userid
+              }
+            })
+            .then(function(response) {
+              var resdata = response.data;
+              for (let i = 0; i < resdata.length; i++) {
+                if (resdata[i].proposal_content.length > 50) {
+                  resdata[i].proposal_content =
+                    resdata[i].proposal_content.substring(50) + "...";
+                }
+                _this.list.push(resdata[i]);
+              }
+
+              if (resdata.length < 20) _this.finished = true;
+              else {
+                _this.pageindex++;
+              }
+              _this.loading = false;
+            })
+            .catch(function(error) {
+              utils.AlertError(error);
+            });
+        }, 500);
+      }
     },
     onRefresh() {
       // 清空列表数据
@@ -188,6 +284,10 @@ export default {
     }
   }
 };
+
+dd.error(function(err) {
+  utils.AlertError("钉钉鉴权失败，请联系管理员: " + JSON.stringify(err));
+});
 </script>
 <style>
 #advicelist {

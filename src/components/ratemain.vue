@@ -27,9 +27,6 @@ export default {
     });
   },
   methods: {
-    toAdd() {
-      this.$router.push({ path: "/addadvice" });
-    }
   }
 };
 </script>

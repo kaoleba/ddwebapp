@@ -3,10 +3,12 @@
     <router-view />
   </div>
 </template>
-<script>
 
+<script>
 export default {
-  name: "app",
+  mounted: function() {
+    window.ddUserInfo=undefined;
+  }
 };
 </script>
 
@@ -18,6 +20,6 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin: 0px;
-  padding:0px;
+  padding: 0px;
 }
 </style>
