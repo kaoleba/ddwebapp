@@ -113,7 +113,7 @@ export default {
       host_dept: "",
       assisting_dept: "",
       host_user: "",
-      proposal_score_id:"",
+      proposal_score_id: ""
     };
   },
   methods: {
@@ -121,26 +121,31 @@ export default {
       this.$router.go(-1);
     },
     btnConfirm() {
-      let _this = this;
-      axios
-        .post(this.global.ddapi + "proposal/SaveSore", {
-          proposal_score_id: _this.proposal_score_id,
-          proposal_id: _this.proposal_id,
-          evaluator_id: window.ddUserInfo.userid,
-          evaluator_name: window.ddUserInfo.name,
-          score1: _this.score1
-        })
-        .then(function(response) {
-          if (response.data == "") {
-            Toast.success("打分成功");
-            _this.$router.go(-1);
-          } else {
-            utils.AlertError("打分失败：" + response.data);
-          }
-        })
-        .catch(function(error) {
-          utils.AlertError("打分失败：" + error);
-        });
+      Dialog.confirm({
+        title: "确认",
+        message: "是否提交打分？"
+      }).then(() => {
+        let _this = this;
+        axios
+          .post(this.global.ddapi + "proposal/SaveSore", {
+            proposal_score_id: _this.proposal_score_id,
+            proposal_id: _this.proposal_id,
+            evaluator_id: window.ddUserInfo.userid,
+            evaluator_name: window.ddUserInfo.name,
+            score1: _this.score1
+          })
+          .then(function(response) {
+            if (response.data == "") {
+              Toast.success("打分成功");
+              _this.$router.go(-1);
+            } else {
+              utils.AlertError("打分失败：" + response.data);
+            }
+          })
+          .catch(function(error) {
+            utils.AlertError("打分失败：" + error);
+          });
+      });
     },
     btnTask() {
       Toast("打开任务详情界面");
