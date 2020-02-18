@@ -1,52 +1,88 @@
-
 <template>
   <div>
-    <van-grid>
-      <van-grid-item :icon="img1" text="分数排名" @click="openPage('分数排名')" />
-      <van-grid-item :icon="img2" text="单位统计" @click="openPage('单位统计')" />
-      <van-grid-item :icon="img3" text="任务报表" @click="openPage('任务报表')" />
-      <van-grid-item :icon="img4" text="任务统计" @click="openPage('任务统计')" />
-      <van-grid-item :icon="img5" text="分数排名" @click="openPage('分数排名')" />
-      <van-grid-item :icon="img6" text="单位统计" @click="openPage('单位统计')" />
-      <van-grid-item :icon="img7" text="任务报表" @click="openPage('任务报表')" />
-      <van-grid-item :icon="img8" text="任务统计" @click="openPage('任务统计')" />
-    </van-grid>
+    <van-tabs
+      swipeable
+      title-active-color="#0089ff"
+      color="#0089ff"
+    >
+      <van-tab title="本月排行">
+        <van-list v-model="loading1" :finished="finished1" @load="loadMonthReport">
+          <van-cell
+            v-for="item in monthScoreList"
+            :key="item.proposal_dept"
+            :title="item.proposal_dept"
+            :value="item.score"
+            center
+            title-style="text-align:left;padding-left:20px;"
+          />
+        </van-list>
+      </van-tab>
+      <van-tab title="单位统计">
+        <van-list v-model="loading2" :finished="finished2" @load="loadDeptReport">
+          <van-cell v-for="item in deptScoreList" :key="item.proposal_dept"
+            :title="item.monthorder"
+            :value="item.score"
+            center
+            title-style="text-align:left;padding-left:20px;" />
+        </van-list>
+      </van-tab>
+    </van-tabs>
   </div>
 </template>
 <script>
-
-import { Button, Grid, GridItem, Toast } from "vant";
+import { Toast, Tab, Tabs, List, Cell } from "vant";
 import Vue from "vue";
 import * as dd from "dingtalk-jsapi";
-Vue.use(Button)
-  .use(Grid)
-  .use(GridItem)
-  .use(Toast).use(dd);
+import utils from "../util/utils";
+import axios from "axios";
+Vue.use(Toast)
+  .use(Tab)
+  .use(Tabs)
+  .use(List)
+  .use(Cell)
+  .use(dd);
 
 export default {
-  mounted: function() {
+  mounted: () => {
     dd.ready(function() {
       dd.biz.navigation.setTitle({
         title: "统计查询" //控制标题文本，空字符串表示显示默认文本
       });
     });
   },
+  methods: {
+    loadMonthReport: function() {
+      axios.get(this.global.ddapi+"/proposal/MonthScoreList").then(response=>{
+        if(response.data)
+        this.monthScoreList=response.data;
+        this.finished1=true;
+      }).catch(error=>{
+        utils.AlertError(error);
+      });
+    },
+    loadDeptReport: function() {
+      axios.get(this.global.ddapi+"/proposal/DeptScoreList").then(response=>{
+        if(response.data){
+          for(var i=0;i<response.data.length;i++){
+            response.data[i].monthorder=response.data[i].monthorder+"月份";
+          }
+          this.deptScoreList=response.data;
+          this.finished2=true;
+        }
+      }).catch(error=>{
+        utils.AlertError(error);
+      });
+    }
+  },
   data() {
     return {
-      img1: require("../assets/雷达图.png"),
-      img2: require("../assets/漏斗图.png"),
-      img3: require("../assets/散点图.png"),
-      img4: require("../assets/条状图.png"),
-      img5: require("../assets/折线图.png"),
-      img6: require("../assets/中国地图.png"),
-      img7: require("../assets/柱状图.png"),
-      img8: require("../assets/折线图1.png")
+      loading1: false,
+      loading2: false,
+      finished1: false,
+      finished2: false,
+      monthScoreList: [],
+      deptScoreList: []
     };
-  },
-  methods: {
-    openPage(page) {
-      Toast("打开页面：" + page);
-    }
   }
 };
 </script>
