@@ -251,8 +251,12 @@ export default {
       });
     },
     btnRate() {
-      if (this.state != "已提交") {
-        utils.AlertError("已提交建议可以参评");
+      if (this.state == "未提交") {
+        utils.AlertError("请先提交再进行参评");
+        return;
+      }
+      if (this.state == "已参评") {
+        utils.AlertError("该建议已参评");
         return;
       }
       let _this = this;
