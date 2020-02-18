@@ -15,13 +15,13 @@
 </template>
 <script>
 
-import { Button, Grid, GridItem, Toast } from "vant";
+import { Button, Grid, GridItem } from "vant";
 import Vue from "vue";
 import * as dd from "dingtalk-jsapi";
 Vue.use(Button)
   .use(Grid)
   .use(GridItem)
-  .use(Toast).use(dd);
+  .use(dd);
 
 export default {
   mounted: function() {
@@ -43,13 +43,7 @@ export default {
       img8: require("../assets/折线图1.png")
     };
   },
-  methods: {
-    openPage(page) {
-      Toast("打开页面：" + page);
-    }
-  }
 };
 </script>
 
-<style>
-</style>
+
