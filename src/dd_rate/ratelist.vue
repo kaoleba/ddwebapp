@@ -89,60 +89,37 @@ export default {
       let _this = this;
       Toast.loading({
         message: "加载中...",
-        forbidClick: true
+        forbidClick: true,
+        duration: 0
       });
-      var jsapiurl =
-        this.global.ddapi + "DD/GetConfig?url=" + this.global.adviceurl;
-      axios
-        .get(jsapiurl)
-        //then获取成功；response成功后的返回值（对象）
-        .then(response => {
-          Toast.clear();
-          var res = response.data.content;
-          dd.ready(function() {
-            setTimeout(function() {
-              dd.config({
-                agentId: _this.global.agentId, // 必填，微应用ID
-                corpId: res.CorpId, //必填，企业ID
-                timeStamp: res.TimeStamp, // 必填，生成签名的时间戳
-                nonceStr: res.NonceStr, // 必填，生成签名的随机串
-                signature: res.Signature, // 必填，签名
-                jsApiList: [
-                  "runtime.info",
-                  "biz.contact.complexPicker",
-                  "biz.contact.departmentsPicker"
-                ] // 必填，需要使用的jsapi列表，注意：不要带dd。
-              });
-              //获取个人信息
-              dd.runtime.permission.requestAuthCode({
-                corpId: res.CorpId, // 企业id
-                onSuccess: function(info) {
-                  var userUrl =
-                    _this.global.ddapi + "DD/GetUserInfo?code=" + info.code;
-                  axios
-                    .get(userUrl)
-                    //then获取成功；response成功后的返回值（对象）
-                    .then(res => {
-                      if (res.data.errorMsg != "") {
-                        utils.AlertError({
-                          "获取钉钉用户信息异常：": res.data.errorMsg
-                        });
-                      } else {
-                        window.ddUserInfo = JSON.parse(res.data.content);
-                        _this.onLoad();
-                      }
-                    })
-                    .catch(error => {
-                      utils.AlertError("获取用户信息失败:" + error);
-                    });
+
+      dd.ready(function() {
+        //获取个人信息
+        dd.runtime.permission.requestAuthCode({
+          corpId: _this.global.CorpId, // 企业id
+          onSuccess: function(info) {
+            var userUrl =
+              _this.global.ddapi + "DD/GetUserInfo?code=" + info.code;
+            axios
+              .get(userUrl)
+              //then获取成功；response成功后的返回值（对象）
+              .then(res => {
+                Toast.clear();
+                if (res.data.errorMsg != "") {
+                  utils.AlertError({
+                    "获取钉钉用户信息异常：": res.data.errorMsg
+                  });
+                } else {
+                  window.ddUserInfo = JSON.parse(res.data.content);
+                  _this.onLoad();
                 }
+              })
+              .catch(error => {
+                utils.AlertError("获取用户信息失败:" + error);
               });
-            }, 500);
-          });
-        })
-        .catch(error => {
-          utils.AlertError("访问配置api异常:" + error);
+          }
         });
+      });
     }
   },
   mounted: function() {
@@ -224,7 +201,7 @@ export default {
 
     open(item) {
       this.$router.push({
-        path: "/rate",
+        path: "/ratenew",
         query: {
           entity: item
         }
@@ -254,6 +231,7 @@ export default {
               }
             })
             .then(function(response) {
+           
               var resdata = response.data;
               for (let i = 0; i < resdata.length; i++) {
                 if (resdata[i].proposal_content.length > 50) {

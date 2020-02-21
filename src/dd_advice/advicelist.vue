@@ -105,7 +105,8 @@ export default {
       let _this = this;
       Toast.loading({
         message: "加载中...",
-        forbidClick: true
+        forbidClick: true,
+        duration:5000,
       });
       var jsapiurl =
         this.global.ddapi + "DD/GetConfig?url=" + this.global.adviceurl;
@@ -132,13 +133,14 @@ export default {
               dd.runtime.permission.requestAuthCode({
                 corpId: res.CorpId, // 企业id
                 onSuccess: function(info) {
-                  Toast.clear();
+               
                   var userUrl =
                     _this.global.ddapi + "DD/GetUserInfo?code=" + info.code;
                   axios
                     .get(userUrl)
                     //then获取成功；response成功后的返回值（对象）
                     .then(res => {
+                         Toast.clear();
                       if (res.data.errorMsg != "") {
                         utils.AlertError({
                           "获取钉钉用户信息异常：": res.data.errorMsg
@@ -268,14 +270,13 @@ export default {
             this.refreshing = false;
             this.pageindex = 1;
           }
-
           axios
             .get(_this.global.ddapi + "proposal", {
               params: {
                 page: _this.pageindex,
                 state: _this.statevalue,
                 ny: _this.ny,
-                depitid: window.ddUserInfo.department[0]
+                deptid: window.ddUserInfo.department[0]
               }
             })
             .then(function(response) {

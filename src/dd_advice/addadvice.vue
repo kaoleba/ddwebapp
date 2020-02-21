@@ -119,13 +119,14 @@ export default {
       if (this.entity.state == "1") this.state = "已提交";
       if (this.entity.state == "3") this.state = "已参评";
     } else {
+      this.proposal_dept = window.ddUserInfo.remark;
+      this.proposal_deptid = window.ddUserInfo.department[0];
       this.id = "";
       this.$nextTick(function() {
         this.$refs.inputVal.focus();
       }, 500);
     }
-    this.proposal_dept = window.ddUserInfo.remark;
-    this.proposal_deptid = window.ddUserInfo.department[0];
+   
   },
   data() {
     return {

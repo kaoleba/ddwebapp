@@ -47,6 +47,10 @@ const routes = [
     path: '/rate',
     component: () => import('./dd_rate/rate.vue'),
   },
+  {
+    path: '/ratenew',
+    component: () => import('./dd_rate/ratenew.vue'),
+  },
 ]
 
 const router = new Router({ routes });
