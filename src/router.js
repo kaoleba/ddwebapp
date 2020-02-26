@@ -51,6 +51,10 @@ const routes = [
     path: '/ratenew',
     component: () => import('./dd_rate/ratenew.vue'),
   },
+  {
+    path: '/host_user',
+    component: () => import('./dd_org/host_user.vue'),
+  },
 ]
 
 const router = new Router({ routes });

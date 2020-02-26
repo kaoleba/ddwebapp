@@ -22,14 +22,14 @@
       <van-field
         v-model="host_dept"
         required
-        label="主办部门"
+        label="归口主办部门"
         placeholder="请选择主办部门"
         readonly
         @click="chooseDept"
       />
       <van-field
         v-model="assisting_dept"
-        label="协办部门"
+        label="归口协办部门"
         placeholder="请选择协办部门"
         readonly
         @click="chooseDepts"
@@ -41,7 +41,15 @@
         readonly
         @click="chooseUser"
       />
+      <van-field v-model="prodate" required label="例会期数" type="digit" :disabled="checked" placeholder="请输入期数" />
+
+      <van-field name="checkbox" label>
+        <template #input>
+          <van-checkbox v-model="checked" @change="changecheck">例会外补充提报</van-checkbox>
+        </template>
+      </van-field>
     </van-cell-group>
+
     <van-row>
       <van-tag v-if="id" size="large" plain type="primary">{{state}}</van-tag>
     </van-row>
@@ -68,6 +76,15 @@
       style="  margin-top: 15px;margin-left:20px"
       @click="btnCommit"
     >提交</van-button>
+
+    <!-- <van-popup
+      v-model="show_host_user"
+      position="bottom"
+      duration="0.4"
+      :style="{ height: '100%' }"
+    >
+      <user @return-value="GetHost_User"></user>
+    </van-popup>-->
   </div>
 </template>
 <script>
@@ -81,9 +98,14 @@ import {
   Dialog,
   Divider,
   Tag,
-  Row
+  Row,
+  Popup,
+  Checkbox,
+  CheckboxGroup,
+  Picker
 } from "vant";
 import * as dd from "dingtalk-jsapi";
+// import user from "../dd_org/host_user.vue";
 import Vue from "vue";
 import axios from "axios";
 import utils from "../util/utils";
@@ -98,10 +120,18 @@ Vue.use(Button)
   .use(dd)
   .use(Divider)
   .use(Tag)
-  .use(Row);
+  .use(Row)
+  .use(Popup)
+  .use(Checkbox)
+  .use(CheckboxGroup)
+  .use(Picker);
 
 export default {
   mounted: function() {
+    if (this.$route.query.host_user) {
+      this.host_user = this.$route.query.host_user;
+      return;
+    }
     this.entity = this.$route.query.entity;
     if (this.entity != undefined) {
       this.id = this.entity.proposal_id;
@@ -115,6 +145,9 @@ export default {
       this.assisting_dept = this.entity.assisting_dept;
       this.host_userid = this.entity.host_userid;
       this.host_user = this.entity.host_user;
+      this.prodate = this.entity.proposal_def1;
+      if(this.prodate=="")
+         this.checked=true;
       if (this.entity.state == "0") this.state = "未提交";
       if (this.entity.state == "1") this.state = "已提交";
       if (this.entity.state == "3") this.state = "已参评";
@@ -126,8 +159,10 @@ export default {
         this.$refs.inputVal.focus();
       }, 500);
     }
-   
   },
+  // components: {
+  //   user
+  // },
   data() {
     return {
       title: "",
@@ -142,15 +177,31 @@ export default {
       assisting_dept: "",
       host_userid: "",
       host_user: "",
-      state: ""
+      state: "",
+      show_host_user: false,
+      prodate: "",
+      checked: false
     };
   },
   methods: {
+    changecheck(value)
+    {
+       if(value)
+       {
+         Toast('仅在当月例会不满4期可以选择');
+         this.prodate="";
+          //utils.AlertError("仅在当月例会不满4期可以选择");
+       }
+    },
     toAdd() {
       this.$router.push({ path: "/advicelist" });
     },
     onClickLeft() {
       this.$router.go(-1);
+    },
+    onDateConfirm(value) {
+      this.prodate = value;
+      this.showPicker = false;
     },
     btnConfirm() {
       let _this = this;
@@ -158,11 +209,18 @@ export default {
         _this.title == "" ||
         _this.content == "" ||
         _this.host_dept == "" ||
-        _this.proposal_dept == ""
+        _this.proposal_dept == "" 
       ) {
         utils.AlertError("请填写必填内容");
         return;
       }
+       
+       if(_this.prodate == ""&&_this.checked==false)
+       {
+         utils.AlertError("请填写例会期数");
+        return;
+       }
+
       if (this.id != "" && this.state != "未提交") {
         utils.AlertError("该建议已提交");
         return;
@@ -181,6 +239,7 @@ export default {
           assisting_dept: _this.assisting_dept,
           host_userid: _this.host_userid,
           host_user: _this.host_user,
+          proposal_def1: _this.prodate,
           creatorid: window.ddUserInfo.userid,
           creator: window.ddUserInfo.name
         })
@@ -362,10 +421,36 @@ export default {
         });
       });
     }
+    // GetHost_User(result) {
+    //   if (result != "") {
+    //     this.host_user = result;
+    //   }
+    //   this.show_host_user = false;
+    // }
   }
 };
 </script>
 
 <style>
+#host_user {
+  text-align: left;
+  padding: 15px;
+}
+
+.van-address-list__bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 5px 16px;
+  background-color: #fff;
+  text-align: right;
+}
+.van-address-list__add {
+  height: 40px;
+  line-height: 38px;
+}
 </style>
 

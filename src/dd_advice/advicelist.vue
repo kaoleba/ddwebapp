@@ -313,7 +313,8 @@ export default {
 };
 
 dd.error(function(err) {
-  utils.AlertError("钉钉鉴权失败，请联系管理员: " + JSON.stringify(err));
+  alert("钉钉鉴权失败，请联系管理员: " +  JSON.stringify(err));
+  //utils.AlertError("钉钉鉴权失败，请联系管理员: " + JSON.stringify(err));
 });
 </script>
 <style>

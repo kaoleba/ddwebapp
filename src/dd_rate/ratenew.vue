@@ -150,13 +150,13 @@
       >最终得分：{{valueadd}}</van-notice-bar>
     </div>
     <div style="margin-bottom:15px">
-    <van-button
+    <!-- <van-button
       type="primary"
       size="small"
       style="  margin-top: 15px;margin-right:20px"
       @click="btnTask"
-    >落实情况</van-button>
-    <van-button type="info" size="small" style="margin-top: 15px" @click="btnConfirm">提交打分</van-button>
+    >落实情况</van-button> -->
+    <van-button type="info" size="small" style="margin-top: 15px" @click="btnConfirm">测评确认</van-button>
     </div>
   </div>
 </template>
@@ -251,14 +251,14 @@ export default {
           })
           .then(function(response) {
             if (response.data == "") {
-              Toast.success("打分成功");
+              Toast.success("测评确认成功");
               _this.$router.go(-1);
             } else {
-              utils.AlertError("打分失败：" + response.data);
+              utils.AlertError("测评确认失败：" + response.data);
             }
           })
           .catch(function(error) {
-            utils.AlertError("打分失败：" + error);
+            utils.AlertError("测评确认失败：" + error);
           });
       });
     },
