@@ -17,13 +17,14 @@
           />
         </van-list>
       </van-tab>
-      <van-tab title="单位统计">
+      <van-tab title="本单位统计">
         <van-list v-model="loading2" :finished="finished2" @load="loadDeptReport">
           <van-cell v-for="item in deptScoreList" :key="item.proposal_dept"
-            :title="item.monthorder"
             :value="item.score"
             center
-            title-style="text-align:left;padding-left:20px;" />
+            title-style="text-align:left;padding-left:20px;">
+            <span slot="title">{{item.monthorder}}月份</span>
+            </van-cell>
         </van-list>
       </van-tab>
     </van-tabs>
@@ -61,12 +62,25 @@ export default {
       });
     },
     loadDeptReport: function() {
-      axios.get(this.global.ddapi+"/proposal/DeptScoreList").then(response=>{
+      axios.get(this.global.ddapi+"/proposal/DeptScoreList",{params:{deptId:window.ddUserInfo.department[0]}}).then(response=>{
         if(response.data){
-          for(var i=0;i<response.data.length;i++){
-            response.data[i].monthorder=response.data[i].monthorder+"月份";
+          let data=[];
+          let m=new Date().getMonth();
+          let i,j;
+          for(i=m,j=response.data.length-1;i>0;i--){
+            if(j<0||response.data[j].monthorder<i){
+              data.push({
+                proposal_dept:"",
+                score:0,
+                monthorder:i
+              });
+            }
+            else{
+              data.push(response.data[j]);
+              j--;
+            }
           }
-          this.deptScoreList=response.data;
+          this.deptScoreList=data;
           this.finished2=true;
         }
       }).catch(error=>{

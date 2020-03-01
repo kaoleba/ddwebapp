@@ -20,7 +20,7 @@ const routes = [
       },
       {
         path: 'adgridmain',
-        component: () => import('./dd_report/adgridmain.vue'),
+        component: () => import('./dd_report/rategridmain.vue'),
       }
     ]
   },
