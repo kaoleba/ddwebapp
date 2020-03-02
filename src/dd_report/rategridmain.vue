@@ -65,10 +65,10 @@ export default {
       axios.get(this.global.ddapi+"/proposal/DeptScoreList",{params:{deptId:window.ddUserInfo.department[0]}}).then(response=>{
         if(response.data){
           let data=[];
-          let m=new Date().getMonth();
+          let m=new Date().getMonth()+1;
           let i,j;
-          for(i=m,j=response.data.length-1;i>0;i--){
-            if(j<0||response.data[j].monthorder<i){
+          for(i=m,j=0;i>0;i--){
+            if(j>=response.data.length||response.data[j].monthorder<i){
               data.push({
                 proposal_dept:"",
                 score:0,
@@ -77,7 +77,7 @@ export default {
             }
             else{
               data.push(response.data[j]);
-              j--;
+              j++;
             }
           }
           this.deptScoreList=data;
