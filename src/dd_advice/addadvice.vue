@@ -3,16 +3,24 @@
   <div>
     <van-cell-group>
       <van-field v-model="proposal_dept" readonly label="提报单位" />
-      <van-field v-model="title" required label="建议标题" placeholder="请输入建议标题" ref="inputVal" />
+      <van-field
+        :readonly="read"
+        v-model="title"
+        required
+        label="建议标题"
+        placeholder="请输入建议标题"
+        ref="inputVal"
+      />
 
       <van-field
         v-model="content"
+        :readonly="read"
         required
         rows="6"
         autosize
         label="建议内容"
         type="textarea"
-        maxlength="300"
+        maxlength="150"
         placeholder="请输入建议内容"
         show-word-limit
         @blur="viewDefault"
@@ -23,54 +31,69 @@
         v-model="host_dept"
         required
         label="归口主办部门"
-        placeholder="请选择主办部门"
+        placeholder="请选择归口主办部门"
         readonly
         @click="chooseDept"
       />
       <van-field
         v-model="assisting_dept"
         label="归口协办部门"
-        placeholder="请选择协办部门"
+        placeholder="请选择归口协办部门"
         readonly
         @click="chooseDepts"
       />
       <van-field
         v-model="host_user"
-        label="分管领导"
-        placeholder="请选择分管领导"
+        label="归口分管领导"
+        placeholder="请选择归口分管领导"
         readonly
         @click="chooseUser"
       />
-      <van-field v-model="prodate" required label="例会期数" type="digit" :disabled="checked" placeholder="请输入期数" />
+      <van-row>
+        <van-col span="13">
+          <van-field
+            v-model="prodate"
+            :readonly="read"
+            required
+            label="例会期数"
+            type="digit"
+            :disabled="checked"
+            placeholder="请输入期数"
+          />
+        </van-col>
+        <van-col span="11">
+            <van-checkbox v-model="checked" @change="changecheck" :disabled="read" style="font-size:14px;margin-top:8px">例会外补充提报</van-checkbox>
+        </van-col>
+      </van-row>
 
-      <van-field name="checkbox" label>
+
+    </van-cell-group>
+      <van-field  name="checkbox" label>
         <template #input>
-          <van-checkbox v-model="checked" @change="changecheck">例会外补充提报</van-checkbox>
+          <van-checkbox shape="square" v-model="IfRate" :disabled="read" >是否参评</van-checkbox>
         </template>
       </van-field>
-    </van-cell-group>
-
     <van-row>
       <van-tag v-if="id" size="large" plain type="primary">{{state}}</van-tag>
     </van-row>
 
-    <van-button type="info" size="small" style="  margin-top: 15px" @click="btnConfirm">保存</van-button>
+    <van-button v-if="IfCan" type="info" size="small" style="margin-top: 15px" @click="btnConfirm">保存</van-button>
     <van-button
-      v-if="id"
+      v-if="id&&IfCan"
       type="danger"
       size="small"
-      style="  margin-top: 15px;margin-left:20px"
+      style="  margin-top: 15px;margin-left:20px;margin-bottom: 20px"
       @click="btnDelete"
     >删除</van-button>
     <van-button
-      v-if="id"
+      v-if="!IfCan&&!IfRate"
       type="warning"
       size="small"
-      style="  margin-top: 15px;margin-left:20px"
+      style="  margin-top: 15px;"
       @click="btnRate"
     >参评</van-button>
     <van-button
-      v-if="id"
+      v-if="id&&IfCan"
       type="primary"
       size="small"
       style="  margin-top: 15px;margin-left:20px"
@@ -99,6 +122,7 @@ import {
   Divider,
   Tag,
   Row,
+  Col,
   Popup,
   Checkbox,
   CheckboxGroup,
@@ -124,7 +148,8 @@ Vue.use(Button)
   .use(Popup)
   .use(Checkbox)
   .use(CheckboxGroup)
-  .use(Picker);
+  .use(Picker)
+  .use(Col);
 
 export default {
   mounted: function() {
@@ -146,11 +171,19 @@ export default {
       this.host_userid = this.entity.host_userid;
       this.host_user = this.entity.host_user;
       this.prodate = this.entity.proposal_def1;
-      if(this.prodate=="")
-         this.checked=true;
+      if (this.prodate == "") this.checked = true;
       if (this.entity.state == "0") this.state = "未提交";
-      if (this.entity.state == "1") this.state = "已提交";
-      if (this.entity.state == "3") this.state = "已参评";
+      if (this.entity.state == "1") {
+        this.state = "已提交";
+        this.read = true;
+        this.IfCan=false;
+      }
+      if (this.entity.state == "3") {
+        this.state = "已参评";
+        this.read = true;
+        this.IfRate=true;
+        this.IfCan=false;
+      }
     } else {
       this.proposal_dept = window.ddUserInfo.remark;
       this.proposal_deptid = window.ddUserInfo.department[0];
@@ -180,18 +213,21 @@ export default {
       state: "",
       show_host_user: false,
       prodate: "",
-      checked: false
+      checked: false,
+      read: false,
+      IfRate:false,
+      IfCan:true,
     };
   },
   methods: {
-    changecheck(value)
-    {
-       if(value)
-       {
-         Toast('仅在当月例会不满4期可以选择');
-         this.prodate="";
-          //utils.AlertError("仅在当月例会不满4期可以选择");
-       }
+    changecheck(value) {
+      if (value) {
+        if (!this.id) {
+          Toast("仅在当月例会不满4期可以选择");
+        }
+        this.prodate = "";
+        //utils.AlertError("仅在当月例会不满4期可以选择");
+      }
     },
     toAdd() {
       this.$router.push({ path: "/advicelist" });
@@ -209,17 +245,16 @@ export default {
         _this.title == "" ||
         _this.content == "" ||
         _this.host_dept == "" ||
-        _this.proposal_dept == "" 
+        _this.proposal_dept == ""
       ) {
         utils.AlertError("请填写必填内容");
         return;
       }
-       
-       if(_this.prodate == ""&&_this.checked==false)
-       {
-         utils.AlertError("请填写例会期数");
+
+      if (_this.prodate == "" && _this.checked == false) {
+        utils.AlertError("请填写例会期数");
         return;
-       }
+      }
 
       if (this.id != "" && this.state != "未提交") {
         utils.AlertError("该建议已提交");
@@ -285,6 +320,9 @@ export default {
         utils.AlertError("该建议已提交");
         return;
       }
+      let state="1";
+      if(this.IfRate)
+        state="3";
       let _this = this;
       Dialog.confirm({
         title: "确认",
@@ -294,7 +332,7 @@ export default {
           .get(_this.global.ddapi + "proposal/UpdateState", {
             params: {
               id: _this.id,
-              state: "1"
+              state: state
             }
           })
           .then(function(response) {
@@ -346,6 +384,7 @@ export default {
     },
     chooseDept() {
       let _this = this;
+      if (_this.read) return;
       dd.ready(function() {
         dd.biz.contact.departmentsPicker({
           title: "主办单位", //标题
@@ -364,6 +403,7 @@ export default {
     },
     chooseDepts() {
       let _this = this;
+      if (_this.read) return;
       dd.ready(function() {
         dd.biz.contact.departmentsPicker({
           title: "协办单位", //标题
@@ -396,6 +436,7 @@ export default {
     },
     chooseUser() {
       let _this = this;
+      if (_this.read) return;
       dd.ready(function() {
         dd.biz.contact.complexPicker({
           title: "分管领导", //标题
@@ -451,6 +492,11 @@ export default {
 .van-address-list__add {
   height: 40px;
   line-height: 38px;
+}
+
+.van-cell
+{
+  padding: 6px 16px;
 }
 </style>
 

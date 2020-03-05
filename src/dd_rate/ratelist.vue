@@ -22,7 +22,7 @@
           v-for="item in list"
           :key="item.proposal_id"
           :title="item.proposal_title"
-          :desc="item.proposal_content"
+          :desc="item.proposal_content.substring(0,50)"
           :icon="newIcon"
         >
           <div style="margin-left:30px;font-size:12px;border:none;  padding: 5px">
@@ -234,10 +234,10 @@ export default {
            
               var resdata = response.data;
               for (let i = 0; i < resdata.length; i++) {
-                if (resdata[i].proposal_content.length > 50) {
-                  resdata[i].proposal_content =
-                    resdata[i].proposal_content.substring(50) + "...";
-                }
+                // if (resdata[i].proposal_content.length > 50) {
+                //   resdata[i].proposal_content =
+                //     resdata[i].proposal_content.substring(50) + "...";
+                // }
                 _this.list.push(resdata[i]);
               }
 

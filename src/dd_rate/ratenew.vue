@@ -9,156 +9,154 @@
         readonly
         rows="2"
         autosize
-        label="建议内容"
+        label=""
+        label-width="15"
         type="textarea"
-        maxlength="300"
+        maxlength="150"
         placeholder="请输入建议内容"
-        show-word-limit
-        @blur="viewDefault"
+        style="line-height:18px"
       />
       <!-- <van-divider>督办</van-divider> -->
-      <van-field v-model="host_dept" label="主办单位" placeholder readonly />
-      <van-field v-model="assisting_dept" label="协办单位" placeholder readonly />
-      <van-field v-model="host_user" label="分管领导" placeholder readonly />
+      <van-field v-model="host_dept" label="归口主办单位" placeholder readonly />
+      <van-field v-model="assisting_dept" label="归口协办单位" placeholder readonly />
+      <!-- <van-field v-model="host_user" label="分管领导" placeholder readonly /> -->
     </van-cell-group>
-
+    <!-- desc="紧扣企业重点任务，揭示问题清楚，措施思路清晰，对促进企业高效率、高效益、高质量发展具有现实意义。" -->
     <div class="panel" style="text-align: left;padding-left:18px;">
-      <van-panel
-        style="color:red"
-        title="建议价值性"
-        desc="紧扣企业重点任务，揭示问题清楚，措施思路清晰，对促进企业高效率、高效益、高质量发展，具有现实意义"
-      ></van-panel>
+      <van-panel style="color:red" title="建议价值性"></van-panel>
     </div>
     <div style="text-align: center;font-size:13px;margin-top:5px">
       <van-row>
-        <van-col span="6">较差</van-col>
-        <van-col span="6">一般</van-col>
-        <van-col span="4">良好</van-col>
-        <van-col span="8">优秀</van-col>
+        <van-col span="6">优秀</van-col>
+        <van-col span="6">良好</van-col>
+        <van-col span="4">一般</van-col>
+        <van-col span="8">较差</van-col>
       </van-row>
       <div style="text-align: center;font-size:12px;margin-left:35px;margin-top:10px">
         <van-radio-group v-model="score1">
-          <van-row style="margin-top:10px">
+          <van-row style="margin-top:6px">
             <van-col span="6">
-              <van-radio name="4.5">4.5</van-radio>
-            </van-col>
-            <van-col span="6">
-              <van-radio name="7">7</van-radio>
+              <van-radio name="10">10</van-radio>
             </van-col>
             <van-col span="6">
               <van-radio name="8.5">8.5</van-radio>
             </van-col>
             <van-col span="6">
-              <van-radio name="10">10</van-radio>
+              <van-radio name="7">7</van-radio>
             </van-col>
-          </van-row>
-          <van-row style="margin-top:10px">
             <van-col span="6">
               <van-radio name="5.5">5.5</van-radio>
             </van-col>
+          </van-row>
+          <van-row style="margin-top:6px">
             <van-col span="6">
-              <van-radio name="6.5">6.5</van-radio>
+              <van-radio name="9.5">9.5</van-radio>
             </van-col>
             <van-col span="6">
               <van-radio name="8">8</van-radio>
             </van-col>
             <van-col span="6">
-              <van-radio name="9.5">9.5</van-radio>
+              <van-radio name="6.5">6.5</van-radio>
             </van-col>
-          </van-row>
-          <van-row style="margin-top:10px">
             <van-col span="6">
               <van-radio name="5">5</van-radio>
             </van-col>
+          </van-row>
+          <van-row style="margin-top:6px">
             <van-col span="6">
-              <van-radio name="6">6</van-radio>
+              <van-radio name="9">9</van-radio>
             </van-col>
             <van-col span="6">
               <van-radio name="7.5">7.5</van-radio>
             </van-col>
             <van-col span="6">
-              <van-radio name="9">9</van-radio>
+              <van-radio name="6">6</van-radio>
+            </van-col>
+            <van-col span="6">
+              <van-radio name="4.5">4.5</van-radio>
             </van-col>
           </van-row>
         </van-radio-group>
       </div>
     </div>
-
+    <!-- desc="建议及措施具有前瞻性、创新性，体现部室的学习力、敏锐力、专业引领力。" -->
     <div class="panel" style="text-align: left;padding-left:18px;margin-top:5px">
-      <van-panel title="建议创新性" desc="建议及措施，具有前瞻性、创新性，体现部室的学习力、敏锐力、专业引领力"></van-panel>
+      <van-panel title="建议创新性"></van-panel>
     </div>
     <div style="text-align: center;font-size:13px;margin-top:5px">
       <van-row>
-        <van-col span="6">较差</van-col>
-        <van-col span="6">一般</van-col>
-        <van-col span="4">良好</van-col>
-        <van-col span="8">优秀</van-col>
+        <van-col span="6">优秀</van-col>
+        <van-col span="6">良好</van-col>
+        <van-col span="4">一般</van-col>
+        <van-col span="8">较差</van-col>
       </van-row>
       <div style="text-align: center;font-size:12px;margin-left:35px;margin-top:10px">
         <van-radio-group v-model="score2">
-          <van-row style="margin-top:10px">
+          <van-row style="margin-top:6px">
             <van-col span="6">
-              <van-radio name="4.5">4.5</van-radio>
-            </van-col>
-            <van-col span="6">
-              <van-radio name="7">7</van-radio>
+              <van-radio name="10">10</van-radio>
             </van-col>
             <van-col span="6">
               <van-radio name="8.5">8.5</van-radio>
             </van-col>
             <van-col span="6">
-              <van-radio name="10">10</van-radio>
+              <van-radio name="7">7</van-radio>
             </van-col>
-          </van-row>
-          <van-row style="margin-top:10px">
             <van-col span="6">
               <van-radio name="5.5">5.5</van-radio>
             </van-col>
+          </van-row>
+          <van-row style="margin-top:6px">
             <van-col span="6">
-              <van-radio name="6.5">6.5</van-radio>
+              <van-radio name="9.5">9.5</van-radio>
             </van-col>
             <van-col span="6">
               <van-radio name="8">8</van-radio>
             </van-col>
             <van-col span="6">
-              <van-radio name="9.5">9.5</van-radio>
+              <van-radio name="6.5">6.5</van-radio>
             </van-col>
-          </van-row>
-          <van-row style="margin-top:10px">
             <van-col span="6">
               <van-radio name="5">5</van-radio>
             </van-col>
+          </van-row>
+          <van-row style="margin-top:6px">
             <van-col span="6">
-              <van-radio name="6">6</van-radio>
+              <van-radio name="9">9</van-radio>
             </van-col>
             <van-col span="6">
               <van-radio name="7.5">7.5</van-radio>
             </van-col>
             <van-col span="6">
-              <van-radio name="9">9</van-radio>
+              <van-radio name="6">6</van-radio>
+            </van-col>
+            <van-col span="6">
+              <van-radio name="4.5">4.5</van-radio>
             </van-col>
           </van-row>
         </van-radio-group>
       </div>
     </div>
-    <div style="padding-left:15px;padding-right:15px;padding-top:15px">
-      <van-notice-bar
-        :scrollable="false"
-        color="#1989fa"
-        background="#ecf9ff"
-        left-icon="medal-o"
-      >最终得分：{{valueadd}}</van-notice-bar>
+   
+      <van-row>
+        <van-col span="12">
+           <div style="padding-left:30px;padding-right:15px;padding-top:10px">
+          <van-notice-bar
+            :scrollable="false"
+            color="#1989fa"
+            background="#ecf9ff"
+            left-icon="medal-o"
+          >最终得分：{{valueadd}}</van-notice-bar>
+            </div>
+        </van-col>
+        <van-col span="12">
+          <div >
+            <van-button type="info" size="small" style="margin-top: 15px" @click="btnConfirm">测评确认</van-button>
+          </div>
+        </van-col>
+      </van-row>
     </div>
-    <div style="margin-bottom:15px">
-    <!-- <van-button
-      type="primary"
-      size="small"
-      style="  margin-top: 15px;margin-right:20px"
-      @click="btnTask"
-    >落实情况</van-button> -->
-    <van-button type="info" size="small" style="margin-top: 15px" @click="btnConfirm">测评确认</van-button>
-    </div>
-  </div>
+
 </template>
 <script>
 import {
@@ -207,8 +205,8 @@ export default {
       this.host_dept = entity.host_dept;
       this.assisting_dept = entity.assisting_dept;
       this.host_user = entity.host_user;
-      this.score1 =String( entity.score1);
-      this.score2 =String( entity.score2);
+      this.score1 = String(entity.score1);
+      this.score2 = String(entity.score2);
     }
   },
   data() {
@@ -275,8 +273,15 @@ export default {
 </script>
 
 <style>
-.panel .van-cell__title {
+.van-cell__title {
   color: #1989fa;
 }
+
+.van-cell {
+  padding: 3px 16px;
+}
+
+
+
 </style>
 

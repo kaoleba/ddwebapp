@@ -17,9 +17,9 @@
         @blur="viewDefault"
       />
       <!-- <van-divider>督办</van-divider> -->
-      <van-field v-model="host_dept" label="主办单位" placeholder readonly />
-      <van-field v-model="assisting_dept" label="协办单位" placeholder readonly />
-      <van-field v-model="host_user" label="分管领导" placeholder readonly />
+      <van-field v-model="host_dept" label="归口主办单位" placeholder readonly />
+      <van-field v-model="assisting_dept" label="归口协办单位" placeholder readonly />
+      <!-- <van-field v-model="host_user" label="分管领导" placeholder readonly /> -->
     </van-cell-group>
     <van-notice-bar
       wrapable
