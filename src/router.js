@@ -55,17 +55,31 @@ const routes = [
     path: '/host_user',
     component: () => import('./dd_org/host_user.vue'),
   },
+  {
+    path: '/jcdj',
+    component: () => import('./online_scoring/jcdj.vue'),
+    meta:{"title":"抓基层党建述职评议测评"}
+  },
+  {
+    path: '/qmcy',
+    component: () => import('./online_scoring/qmcy.vue'),
+    meta:{"title":"全面从严治党述职评议测评"}
+  },
+  {
+    path: '/qchc',
+    component: () => import('./online_scoring/qchc.vue'),
+  },
 ]
 
 const router = new Router({ routes });
 
-// router.beforeEach((to, from, next) => {
-//   const title = to.meta && to.meta.title;
-//   if (title) {
-//     document.title = title;
-//   }
-//   next();
-// });
+router.beforeEach((to, from, next) => {
+  const title = to.meta && to.meta.title;
+  if (title) {
+    document.title = title;
+  }
+  next();
+});
 
 export {
   router

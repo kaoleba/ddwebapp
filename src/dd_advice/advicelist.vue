@@ -126,7 +126,8 @@ export default {
                 jsApiList: [
                   "runtime.info",
                   "biz.contact.complexPicker",
-                  "biz.contact.departmentsPicker"
+                  "biz.contact.departmentsPicker",
+                  "biz.customContact.choose"
                 ] // 必填，需要使用的jsapi列表，注意：不要带dd。
               });
               //获取个人信息

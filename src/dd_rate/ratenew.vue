@@ -9,7 +9,7 @@
         readonly
         rows="2"
         autosize
-        label=""
+        label
         label-width="15"
         type="textarea"
         maxlength="150"
@@ -17,8 +17,8 @@
         style="line-height:18px"
       />
       <!-- <van-divider>督办</van-divider> -->
-      <van-field v-model="host_dept" label="归口主办单位" placeholder readonly />
-      <van-field v-model="assisting_dept" label="归口协办单位" placeholder readonly />
+      <van-field v-model="host_dept" label="归口主办部室" placeholder readonly />
+      <van-field v-model="assisting_dept" label="归口协办部室" placeholder readonly />
       <!-- <van-field v-model="host_user" label="分管领导" placeholder readonly /> -->
     </van-cell-group>
     <!-- desc="紧扣企业重点任务，揭示问题清楚，措施思路清晰，对促进企业高效率、高效益、高质量发展具有现实意义。" -->
@@ -137,26 +137,22 @@
         </van-radio-group>
       </div>
     </div>
-   
-      <van-row>
-        <van-col span="12">
-           <div style="padding-left:30px;padding-right:15px;padding-top:10px">
-          <van-notice-bar
-            :scrollable="false"
-            color="#1989fa"
-            background="#ecf9ff"
-            left-icon="medal-o"
-          >最终得分：{{valueadd}}</van-notice-bar>
-            </div>
-        </van-col>
-        <van-col span="12">
-          <div >
-            <van-button type="info" size="small" style="margin-top: 15px" @click="btnConfirm">测评确认</van-button>
-          </div>
-        </van-col>
-      </van-row>
-    </div>
-
+    <!-- <div style="padding-right:30px;padding-top:10px">
+      <van-notice-bar
+        :scrollable="false"
+        color="#1989fa"
+        background="#ecf9ff"
+        left-icon="medal-o"
+      >最终得分：{{valueadd}}</van-notice-bar>
+    </div> -->
+    <van-row>
+      <van-col span="24">
+        <div>
+          <van-button type="info" size="small" style="margin-top: 15px" @click="btnConfirm">测评确认</van-button>
+        </div>
+      </van-col>
+    </van-row>
+  </div>
 </template>
 <script>
 import {
@@ -280,8 +276,5 @@ export default {
 .van-cell {
   padding: 3px 16px;
 }
-
-
-
 </style>
 

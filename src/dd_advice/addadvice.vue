@@ -30,15 +30,15 @@
       <van-field
         v-model="host_dept"
         required
-        label="归口主办部门"
-        placeholder="请选择归口主办部门"
+        label="归口主办部室"
+        placeholder="请选择归口主办部室"
         readonly
         @click="chooseDept"
       />
       <van-field
         v-model="assisting_dept"
-        label="归口协办部门"
-        placeholder="请选择归口协办部门"
+        label="归口协办部室"
+        placeholder="请选择归口协办部室"
         readonly
         @click="chooseDepts"
       />
@@ -68,9 +68,9 @@
 
 
     </van-cell-group>
-      <van-field  name="checkbox" label>
+      <van-field  name="checkbox" v-if="id" label>
         <template #input>
-          <van-checkbox shape="square" v-model="IfRate" :disabled="read" >是否参评</van-checkbox>
+          <van-checkbox shape="square"  v-model="IfRate" :disabled="read" >是否参评</van-checkbox>
         </template>
       </van-field>
     <van-row>
@@ -387,7 +387,7 @@ export default {
       if (_this.read) return;
       dd.ready(function() {
         dd.biz.contact.departmentsPicker({
-          title: "主办单位", //标题
+          title: "主办部室", //标题
           corpId: "ding50a1c2db19b1feb035c2f4657eb6378f", //企业的corpId
           multiple: false, //是否多选
           limitTips: "超出了", //超过限定人数返回提示
@@ -406,7 +406,7 @@ export default {
       if (_this.read) return;
       dd.ready(function() {
         dd.biz.contact.departmentsPicker({
-          title: "协办单位", //标题
+          title: "协办部室", //标题
           corpId: "ding50a1c2db19b1feb035c2f4657eb6378f", //企业的corpId
           multiple: true, //是否多选
           limitTips: "超出了", //超过限定人数返回提示
