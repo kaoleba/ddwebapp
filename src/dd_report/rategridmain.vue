@@ -13,15 +13,17 @@
             :title="item.proposal_dept"
             :value="item.score"
             center
+            @click="monthItemClick(item)"
             title-style="text-align:left;padding-left:20px;"
           />
         </van-list>
       </van-tab>
       <van-tab title="本单位统计">
         <van-list v-model="loading2" :finished="finished2" @load="loadDeptReport">
-          <van-cell v-for="item in deptScoreList" :key="item.proposal_dept"
+          <van-cell v-for="(item,index) in deptScoreList" :key="index"
             :value="item.score"
             center
+            @click="deptItemClick(item)"
             title-style="text-align:left;padding-left:20px;">
             <span slot="title">{{item.monthorder}}月份</span>
             </van-cell>
@@ -52,6 +54,13 @@ export default {
     });
   },
   methods: {
+    monthItemClick:function(item){
+      let monthorder=new Date().getMonth()+1;
+      this.$router.push({path:"/adviceinfo",query:{deptid:item.proposal_dept,monthorder:monthorder}});
+    },
+    deptItemClick:function(item){
+      this.$router.push({path:"/adviceinfo",query:{deptid:window.ddUserInfo.remark,monthorder:item.monthorder}});
+    },
     loadMonthReport: function() {
       axios.get(this.global.ddapi+"/proposal/MonthScoreList").then(response=>{
         if(response.data)

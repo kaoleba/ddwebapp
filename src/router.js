@@ -13,8 +13,7 @@ const routes = [
   {
     path: '/advicemain',
     component: () => import('./components/advicemain.vue'),
-    children: [
-      {
+    children: [{
         path: 'advicelist',
         component: () => import('./dd_advice/advicelist.vue'),
       },
@@ -27,8 +26,7 @@ const routes = [
   {
     path: '/ratemain',
     component: () => import('./components/ratemain.vue'),
-    children: [
-      {
+    children: [{
         path: 'ratelist',
         component: () => import('./dd_rate/ratelist.vue'),
 
@@ -38,6 +36,10 @@ const routes = [
         component: () => import('./dd_report/rategridmain.vue'),
       }
     ]
+  },
+  {//建议信息详情
+    path:'/adviceinfo',
+    component:()=>import('./dd_report/adviceinfo.vue')
   },
   {
     path: '/addadvice',
@@ -58,12 +60,16 @@ const routes = [
   {
     path: '/jcdj',
     component: () => import('./online_scoring/jcdj.vue'),
-    meta:{"title":"抓基层党建述职评议测评"}
+    meta: {
+      "title": "抓基层党建述职评议测评"
+    }
   },
   {
     path: '/qmcy',
     component: () => import('./online_scoring/qmcy.vue'),
-    meta:{"title":"全面从严治党述职评议测评"}
+    meta: {
+      "title": "全面从严治党述职评议测评"
+    }
   },
   {
     path: '/qchc',
@@ -71,7 +77,9 @@ const routes = [
   },
 ]
 
-const router = new Router({ routes });
+const router = new Router({
+  routes
+});
 
 router.beforeEach((to, from, next) => {
   const title = to.meta && to.meta.title;
