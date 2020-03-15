@@ -20,7 +20,7 @@
         autosize
         label="建议内容"
         type="textarea"
-        maxlength="150"
+        maxlength="190"
         placeholder="请输入建议内容"
         show-word-limit
         @blur="viewDefault"

@@ -69,6 +69,15 @@ const routes = [
     path: '/qchc',
     component: () => import('./online_scoring/qchc.vue'),
   },
+  {
+    path: '/jw',
+    component: () => import('./online_jwscoring/jw.vue'),
+    meta:{"title":"纪委书记履职情况评议表"}
+  },
+  {
+    path: '/jwqchc',
+    component: () => import('./online_jwscoring/jwqchc.vue'),
+  },
 ]
 
 const router = new Router({ routes });
