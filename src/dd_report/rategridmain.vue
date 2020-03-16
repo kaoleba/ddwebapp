@@ -1,12 +1,13 @@
 <template>
   <div>
+
     <van-tabs
       swipeable
       title-active-color="#0089ff"
       color="#0089ff"
     >
       <van-tab title="本月排行">
-        <van-list v-model="loading1" :finished="finished1" @load="loadMonthReport">
+        <van-list @load="loadMonthReport">
           <van-cell
             v-for="item in monthScoreList"
             :key="item.proposal_dept"
@@ -19,12 +20,12 @@
         </van-list>
       </van-tab>
       <van-tab title="本单位统计">
-        <van-list v-model="loading2" :finished="finished2" @load="loadDeptReport">
+        <van-list @load="loadDeptReport">
           <van-cell v-for="(item,index) in deptScoreList" :key="index"
-            :value="item.score"
             center
             @click="deptItemClick(item)"
             title-style="text-align:left;padding-left:20px;">
+            <span slot="default">{{item.score==-1?"打分未完成":item.score}}</span>
             <span slot="title">{{item.monthorder}}月份</span>
             </van-cell>
         </van-list>
@@ -35,23 +36,17 @@
 <script>
 import { Toast, Tab, Tabs, List, Cell } from "vant";
 import Vue from "vue";
-import * as dd from "dingtalk-jsapi";
 import utils from "../util/utils";
 import axios from "axios";
 Vue.use(Toast)
   .use(Tab)
   .use(Tabs)
   .use(List)
-  .use(Cell)
-  .use(dd);
+  .use(Cell);
 
 export default {
   mounted: () => {
-    dd.ready(function() {
-      dd.biz.navigation.setTitle({
-        title: "统计查询" //控制标题文本，空字符串表示显示默认文本
-      });
-    });
+    window.document.title="查询统计";
   },
   methods: {
     monthItemClick:function(item){
@@ -63,9 +58,12 @@ export default {
     },
     loadMonthReport: function() {
       axios.get(this.global.ddapi+"/proposal/MonthScoreList").then(response=>{
-        if(response.data)
+        window.console.log(response);
+        if(response.data&&response.data.length==0){
+          Toast("打分工作尚未完成，敬请稍候！");
+          return;
+        }
         this.monthScoreList=response.data;
-        this.finished1=true;
       }).catch(error=>{
         utils.AlertError(error);
       });
@@ -90,7 +88,6 @@ export default {
             }
           }
           this.deptScoreList=data;
-          this.finished2=true;
         }
       }).catch(error=>{
         utils.AlertError(error);
@@ -99,10 +96,6 @@ export default {
   },
   data() {
     return {
-      loading1: false,
-      loading2: false,
-      finished1: false,
-      finished2: false,
       monthScoreList: [],
       deptScoreList: []
     };
