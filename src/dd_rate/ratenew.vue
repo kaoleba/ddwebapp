@@ -12,7 +12,7 @@
         label
         label-width="15"
         type="textarea"
-        maxlength="150"
+        maxlength="190"
         placeholder="请输入建议内容"
         style="line-height:18px"
       />
