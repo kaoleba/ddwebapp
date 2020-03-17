@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+
+<body>
+    <div id="app">
+        <template>
+
+        </template>
+        <template>
+            <el-table highlight-current-row border cell-style="padding:5px 0" v-loading="loading" stripe
+                :data="tableData" style="width: 100%;">
+
+                <el-table-column prop="name" label="姓名" width="70" align="center">
+                </el-table-column>
+                <el-table-column label="总体评价" width="" align="center">
+                    <el-table-column prop="zt1" label="满意" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="zt2" label="较满意" width="65" align="center">
+                    </el-table-column>
+                    <el-table-column prop="zt3" label="一般" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="zt4" label="不满意" width="65" align="center">
+                    </el-table-column>
+                </el-table-column>
+                <el-table-column label="落实监督责任情况" width="" align="center">
+                    <el-table-column prop="ls1" label="满意" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="ls2" label="较满意" width="65" align="center">
+                    </el-table-column>
+                    <el-table-column prop="ls3" label="一般" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="ls4" label="不满意" width="65" align="center">
+                    </el-table-column>
+                </el-table-column>
+                <el-table-column label="纪检监察工作成效情况" width="" align="center">
+                    <el-table-column prop="jj1" label="满意" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="jj2" label="较满意" width="65" align="center">
+                    </el-table-column>
+                    <el-table-column prop="jj3" label="一般" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="jj4" label="不满意" width="65" align="center">
+                    </el-table-column>
+                </el-table-column>
+                <el-table-column label="作风建设、廉洁从业情况" width="" align="center">
+                    <el-table-column prop="zf1" label="满意" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="zf2" label="较满意" width="65" align="center">
+                    </el-table-column>
+                    <el-table-column prop="zf3" label="一般" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="zf4" label="不满意" width="65" align="center">
+                    </el-table-column>
+                </el-table-column>
+                <el-table-column label="落实上级纪委交办工作情况" width="" align="center">
+                    <el-table-column prop="lssj1" label="满意" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="lssj2" label="较满意" width="65" align="center">
+                    </el-table-column>
+                    <el-table-column prop="lssj3" label="一般" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="lssj4" label="不满意" width="65" align="center">
+                    </el-table-column>
+                </el-table-column>
+                <el-table-column label="纪监组织建设情况" width="" align="center">
+                    <el-table-column prop="jjzz1" label="满意" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="jjzz2" label="较满意" width="65" align="center">
+                    </el-table-column>
+                    <el-table-column prop="jjzz3" label="一般" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="jjzz4" label="不满意" width="65" align="center">
+                    </el-table-column>
+                </el-table-column>
+                <el-table-column label="问题查摆分析情况" width="" align="center">
+                    <el-table-column prop="wtzz1" label="满意" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="wtzz2" label="较满意" width="65" align="center">
+                    </el-table-column>
+                    <el-table-column prop="wtzz3" label="一般" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="wtzz4" label="不满意" width="65" align="center">
+                    </el-table-column>
+                </el-table-column>
+                <el-table-column label="工作打算和措施" width="" align="center">
+                    <el-table-column prop="gzzz1" label="满意" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="gzzz2" label="较满意" width="65" align="center">
+                    </el-table-column>
+                    <el-table-column prop="gzzz3" label="一般" width="50" align="center">
+                    </el-table-column>
+                    <el-table-column prop="gzzz4" label="不满意" width="65" align="center">
+                    </el-table-column>
+                </el-table-column>
+
+            </el-table>
+            <el-pagination :page-size="20" background layout="total" hide-on-single-page="true">
+            </el-pagination>
+
+        </template>
+
+
+    </div>
+</body>
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<link rel="stylesheet" href="script/element-ui/index.css">
+<script src="script/element-ui/index.js"></script>
+<script src="script/axios.min.js"></script>
+
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            tableData: [],
+            value1: '',
+            pageTotal: 0,
+            page: 1,
+            loading: true,
+            UserName: '',
+            InCompany: false,
+            total: 0,
+            jtjw: 0,
+            qtry: 0,
+            dwjw: 0,
+            currentRow: null,
+            apiurl: 'http://221.2.76.14:8056/api/scoring/GetManyi',
+            //apiurl: ' https://localhost:44392/api/scoring/GetManyi',          
+            dialogVisible: false,
+            eidttitle: "",
+            pass: "",
+            leavedate: ""
+        },
+        mounted: function () {
+            let _this = this;
+            _this.loadList();
+        },
+        methods: {
+            refresh: function () {
+                location.reload();
+            },
+            loadList: function () {
+                let _this = this;
+                _this.loading = true;
+                _this.tableData = [];
+                axios
+                    .get(_this.apiurl, {})
+                    .then(function (response) {
+                        _this.loading = false;
+                        var resdata = response.data.list;
+                        _this.jtjw = response.data.jtjw;
+                        _this.qtry = response.data.qtry;
+                        _this.dwjw = response.data.dwjw;
+                        _this.total = response.data.total;
+
+                        for (let i = 0; i < resdata.length; i++) {
+                            _this.tableData.push(resdata[i]);
+                        }
+                    })
+                    .catch(function (error) {
+                        alert(error);
+                    });
+            }
+        }
+    })
+</script>
+
+<style>
+    #app {
+        font-family: "Avenir", Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #2c3e50;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .el-table .cell {
+        white-space: pre-line;
+    }
+</style>
+
+</html>
