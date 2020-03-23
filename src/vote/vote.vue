@@ -150,7 +150,7 @@ export default {
         }
       }
       if ((this.illegal_flag && this.submitNum == 1) || !this.illegal_flag) {
-        this.vote.illegal_flag = this.illegal_flag ? 1 : 0;
+        this.vote.illegal_flag = this.illegal_flag==true ? 1 : 0;
         Axios.post(_this.global.ddapi + "/vote/savevoteinfo", this.vote).then(
           response => {
             if (response.data && response.data == 1) {
