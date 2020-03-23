@@ -150,7 +150,8 @@ export default {
       finished: false,
       refreshing: false,
       currentDate: "",
-      ny: ""
+      ny: "",
+      pageindex:1
     };
   },
   methods: {
@@ -216,9 +217,9 @@ export default {
       if (window.ddUserInfo.userid != "") {
         setTimeout(() => {
           if (this.refreshing) {
-            this.list = [];
-            this.refreshing = false;
-            this.pageindex = 1;
+            _this.list = [];
+            _this.refreshing = false;
+            _this.pageindex = 1;
           }
 
           axios
