@@ -84,6 +84,16 @@ const routes = [
     path: '/jwqchc',
     component: () => import('./online_jwscoring/jwqchc.vue'),
   },
+  {
+    path: '/vote/:dept/:type',
+    component: () => import('./vote/index.vue'),
+    meta:{"title":"领导干部推荐"}
+  },
+  {
+    path:"/votedetail",
+    component:()=>import('./vote/vote.vue'),
+    meta:{"title":"领导干部推荐"}
+  }
 ]
 
 const router = new Router({
