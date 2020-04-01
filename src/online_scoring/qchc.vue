@@ -26,6 +26,7 @@ export default {
        localStorage.removeItem('全面从严治党述职评议测评');
        Dialog.alert({ title: "提示", message: "提交缓存已清除" });
     }
+    
   },
 };
 </script>

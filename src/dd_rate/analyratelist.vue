@@ -1,5 +1,5 @@
 <template>
-  <div id="ratelist">
+  <div id="analyratelist">
     <van-dropdown-menu>
       <van-dropdown-item v-model="statevalue" :options="option" @change="changeItem" />
       <van-dropdown-item title="筛选" ref="item" style="text-align: center;">
@@ -20,14 +20,14 @@
         <van-panel
           @click="open(item)"
           v-for="item in list"
-          :key="item.proposal_id"
-          :title="item.proposal_title"
-          :desc="item.proposal_content.substring(0,50)"
+          :key="item.analysis_id"
+          :title="item.analysis_title"
+          :desc="item.analysis_content.substring(0,50)"
           :icon="newIcon"
          >
           <div style="margin-left:30px;font-size:12px;border:none;  padding: 5px">
-            <van-tag :type="formatType(item.evaluator_id)">{{ formatState(item.evaluator_id)}}</van-tag>
-            <van-tag type="warning">{{ item.proposal_dept}}</van-tag>
+            <van-tag :type="formatType(item.reviewer_id)">{{ formatState(item.reviewer_id)}}</van-tag>
+            <van-tag type="warning">{{ item.analysis_dept}}</van-tag>
             {{formatDate(item.create_time)}}
           </div>
         </van-panel>
@@ -84,49 +84,11 @@ Vue.use(NavBar)
   .use(Tag);
 
 export default {
-  created: function() {
-    if (typeof window.ddUserInfo == "undefined") {
-      let _this = this;
-      Toast.loading({
-        message: "加载中...",
-        forbidClick: true,
-        duration: 0
-      });
-      
-      dd.ready(function() {
-        //获取个人信息
-        dd.runtime.permission.requestAuthCode({
-          corpId: _this.global.CorpId, // 企业id
-          onSuccess: function(info) {
-            var userUrl =
-              _this.global.ddapi + "DD/GetUserInfo?code=" + info.code;
-            axios
-              .get(userUrl)
-              //then获取成功；response成功后的返回值（对象）
-              .then(res => {
-                Toast.clear();
-                if (res.data.errorMsg != "") {
-                  utils.AlertError({
-                    "获取钉钉用户信息异常：": res.data.errorMsg
-                  });
-                } else {
-                  window.ddUserInfo = JSON.parse(res.data.content);
-                  _this.onLoad();
-                }
-              })
-              .catch(error => {
-                utils.AlertError("获取用户信息失败:" + error);
-              });
-          }
-        });
-      });
-    }
-  },
   mounted: function() {
     this.currentDate = dateutil.formatTime("", "YYYY-MM");
     dd.ready(function() {
       dd.biz.navigation.setTitle({
-        title: "建议评分" //控制标题文本，空字符串表示显示默认文本
+        title: "数据评分" //控制标题文本，空字符串表示显示默认文本
       });
     });
   },
@@ -137,11 +99,11 @@ export default {
   },
   data() {
     return {
-      statevalue: "全部建议",
+      statevalue: "全部分析",
       option: [
-        { text: "全部建议", value: "全部建议" },
-        { text: "未评建议", value: "未评建议" },
-        { text: "已评建议", value: "已评建议" }
+        { text: "全部分析", value: "全部分析" },
+        { text: "未评分析", value: "未评分析" },
+        { text: "已评分析", value: "已评分析" }
       ],
       newIcon: require("../assets/lk.png"),
       isRouterAlive: true,
@@ -202,7 +164,7 @@ export default {
 
     open(item) {
       this.$router.push({
-        path: "/rate",
+        path: "/analyrate",
         query: {
           entity: item
         }
@@ -211,21 +173,19 @@ export default {
 
     onLoad() {
       let _this = this;
+
+      //window.console.log(_this.list);
+
       if (window.ddUserInfo.userid != "") {
-        if(window.ddUserInfo.department[0]!='281043394')
-        {
-          Toast('仅集团领导能进行建议提报打分！');
-          _this.loading = false;
-          return;
-        }
         setTimeout(() => {
           if (this.refreshing) {
             _this.list = [];
             _this.refreshing = false;
             _this.pageindex = 1;
           }
+
           axios
-            .get(_this.global.ddapi + "proposal/GetRateList", {
+            .get(_this.global.ddapi + "analysis/GetRateList", {
               params: {
                 page: _this.pageindex,
                 state: _this.statevalue,
@@ -271,7 +231,7 @@ dd.error(function(err) {
 });
 </script>
 <style>
-#ratelist {
+#analyratelist {
   margin-bottom: 45px;
   text-align: left;
 }

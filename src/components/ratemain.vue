@@ -1,10 +1,11 @@
 
 <template>
-  <div id="app">
+  <div id="ratemain">
     <router-view />
     <van-tabbar route>
       <van-tabbar-item replace to="/ratemain/ratelist" icon="sign">建议评分</van-tabbar-item>
-      <van-tabbar-item replace to="/ratemain/rategridmain" icon="chart-trending-o">统计查询</van-tabbar-item>
+      <van-tabbar-item replace to="/ratemain/analyratelist" icon="completed">数据评分</van-tabbar-item>
+      <van-tabbar-item replace to="/ratemain/adgridmain" icon="chart-trending-o">统计报表</van-tabbar-item> 
     </van-tabbar>
   </div>
 </template>

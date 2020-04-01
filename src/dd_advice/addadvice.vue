@@ -229,9 +229,6 @@ export default {
         //utils.AlertError("仅在当月例会不满4期可以选择");
       }
     },
-    toAdd() {
-      this.$router.push({ path: "/advicelist" });
-    },
     onClickLeft() {
       this.$router.go(-1);
     },

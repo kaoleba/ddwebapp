@@ -18,8 +18,12 @@ const routes = [
         component: () => import('./dd_advice/advicelist.vue'),
       },
       {
+        path: 'analysislist',
+        component: () => import('./dd_analysis/analysislist.vue'),
+      },
+      {
         path: 'adgridmain',
-        component: () => import('./dd_report/rategridmain.vue'),
+        component: () => import('./dd_report/adgridmain.vue'),
       }
     ]
   },
@@ -32,8 +36,12 @@ const routes = [
 
       },
       {
-        path: 'rategridmain',
-        component: () => import('./dd_report/rategridmain.vue'),
+        path: 'analyratelist',
+        component: () => import('./dd_rate/analyratelist.vue'),
+      },
+      {
+        path: 'adgridmain',
+        component: () => import('./dd_report/adgridmain.vue'),
       }
     ]
   },
@@ -50,8 +58,24 @@ const routes = [
     component: () => import('./dd_rate/rate.vue'),
   },
   {
-    path: '/ratenew',
-    component: () => import('./dd_rate/ratenew.vue'),
+    path: '/analysis',
+    component: () => import('./dd_analysis/analysis.vue'),
+  },
+  {
+    path: '/propReport',
+    component: () => import('./dd_report/propReport.vue'),
+  },
+  {
+    path: '/analyReport',
+    component: () => import('./dd_report/analyReport.vue'),
+  },
+  {
+    path: '/totalReport',
+    component: () => import('./dd_report/totalReport.vue'),
+  },
+  {
+    path: '/analyrate',
+    component: () => import('./dd_rate/analyrate.vue'),
   },
   {
     path: '/host_user',

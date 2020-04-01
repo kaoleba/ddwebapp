@@ -2,14 +2,9 @@
 <template>
   <div>
     <van-grid>
-      <van-grid-item :icon="img1" text="分数排名" @click="openPage('分数排名')" />
-      <van-grid-item :icon="img2" text="单位统计" @click="openPage('单位统计')" />
-      <van-grid-item :icon="img3" text="任务报表" @click="openPage('任务报表')" />
-      <van-grid-item :icon="img4" text="任务统计" @click="openPage('任务统计')" />
-      <van-grid-item :icon="img5" text="分数排名" @click="openPage('分数排名')" />
-      <van-grid-item :icon="img6" text="单位统计" @click="openPage('单位统计')" />
-      <van-grid-item :icon="img7" text="任务报表" @click="openPage('任务报表')" />
-      <van-grid-item :icon="img8" text="任务统计" @click="openPage('任务统计')" />
+      <van-grid-item :icon="img5" text="建议提报排名" @click="openPage('/propReport')" />
+      <van-grid-item :icon="img8" text="数据分析排名" @click="openPage('/analyReport')" />
+      <van-grid-item :icon="img3" text="汇总统计排名" @click="openPage('/totalReport')" />
     </van-grid>
   </div>
 </template>
@@ -24,10 +19,10 @@ Vue.use(Button)
   .use(dd);
 
 export default {
-  mounted: function() {
+  mounted: function() {      
     dd.ready(function() {
       dd.biz.navigation.setTitle({
-        title: "统计查询" //控制标题文本，空字符串表示显示默认文本
+        title: "统计报表" 
       });
     });
   },
@@ -43,6 +38,13 @@ export default {
       img8: require("../assets/折线图1.png")
     };
   },
+  methods:{
+    openPage(path) {
+      this.$router.push({
+        path: path
+      });
+    },
+  }
 };
 </script>
 

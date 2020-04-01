@@ -7,6 +7,7 @@
       color="#0089ff"
     >
       <van-tab title="本月排行">
+        
         <van-list @load="loadMonthReport">
           <van-cell
             v-for="item in monthScoreList"
@@ -37,6 +38,7 @@
 import { Toast, Tab, Tabs, List, Cell } from "vant";
 import Vue from "vue";
 import utils from "../util/utils";
+import * as dd from "dingtalk-jsapi";
 import axios from "axios";
 Vue.use(Toast)
   .use(Tab)
@@ -46,7 +48,11 @@ Vue.use(Toast)
 
 export default {
   mounted: () => {
-    window.document.title="查询统计";
+      dd.ready(function() {
+      dd.biz.navigation.setTitle({
+        title: "汇总统计排名"
+      });
+    });
   },
   methods: {
     monthItemClick:function(item){

@@ -1,10 +1,11 @@
 
 <template>
-  <div id="app">
+  <div id="advicemain">
     <router-view />
     <van-tabbar route>
       <van-tabbar-item replace to="/advicemain/advicelist" icon="todo-list-o">建议提报</van-tabbar-item>
-      <van-tabbar-item replace to="/advicemain/adgridmain" icon="chart-trending-o">统计查询</van-tabbar-item>
+      <van-tabbar-item replace to="/advicemain/analysislist" icon="discount-o">数据分析</van-tabbar-item>
+      <van-tabbar-item replace to="/advicemain/adgridmain" icon="chart-trending-o">统计报表</van-tabbar-item> 
     </van-tabbar>
   </div>
 </template>
