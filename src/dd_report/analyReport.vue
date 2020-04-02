@@ -11,9 +11,9 @@
         <van-list @load="loadMonthReport">
           <van-cell
             v-for="item in monthScoreList"
-            :key="item.proposal_dept"
-            :title="item.proposal_dept"
-            :value="item.score"
+            :key="item.analysisDept"
+            :title="item.analysisDept"
+            :value="item.avgScore"
             center
             @click="monthItemClick(item)"
             title-style="text-align:left;padding-left:20px;"
@@ -26,8 +26,8 @@
             center
             @click="deptItemClick(item)"
             title-style="text-align:left;padding-left:20px;">
-            <span slot="default">{{item.score==-1?"打分未完成":item.score}}</span>
-            <span slot="title">{{item.monthorder}}月份</span>
+            <span slot="default">{{item.done===true?item.avgScore:"打分未完成"}}</span>
+            <span slot="title">{{item.month}}月份</span>
             </van-cell>
         </van-list>
       </van-tab>
@@ -57,40 +57,49 @@ export default {
   methods: {
     monthItemClick:function(item){
       let monthorder=new Date().getMonth()+1;
-      this.$router.push({path:"/adviceinfo",query:{deptid:item.proposal_dept,monthorder:monthorder}});
+      this.$router.push({path:"/analyinfo",query:{deptId:item.deptId,month:monthorder}});
     },
     deptItemClick:function(item){
-      this.$router.push({path:"/adviceinfo",query:{deptid:window.ddUserInfo.remark,monthorder:item.monthorder}});
+      this.$router.push({path:"/analyinfo",query:{deptId:window.ddUserInfo.department[0],month:item.month}});
     },
     loadMonthReport: function() {
-      axios.get(this.global.ddapi+"/proposal/MonthScoreList").then(response=>{
-
-        window.console.log(response);
-        if(response.data&&response.data.length==0){
+      axios.get(this.global.javaapi+"/monthScoreList").then(response=>{
+        if(response.data.code !== 0){
+          Toast("程序错误!请联系管理员");
+          return;
+        }
+        window.console.log('response:' + JSON.stringify(response));
+        if(response.data.result == null || response.data.result&&response.data.result.length==0){
           Toast("打分工作尚未完成，敬请稍候！");
           return;
         }
-        this.monthScoreList=response.data;
+        this.monthScoreList=response.data.result;
       }).catch(error=>{
         utils.AlertError(error);
       });
     },
     loadDeptReport: function() {
-      axios.get(this.global.ddapi+"/proposal/DeptScoreList",{params:{deptId:window.ddUserInfo.department[0]}}).then(response=>{
+      axios.get(this.global.javaapi+"/deptScoreList",{params:{deptId:window.ddUserInfo.department[0]}}).then(response=>{
+        window.console.log('response1:' + JSON.stringify(response));
+        if(response.data && response.data.code !== 0){
+          Toast("程序错误!请联系管理员");
+          return;
+        }
         if(response.data){
           let data=[];
           let m=new Date().getMonth()+1;
           let i,j;
           for(i=m,j=0;i>0;i--){
-            if(j>=response.data.length||response.data[j].monthorder<i){
+            if(response.data.result === null || j>=response.data.result.length||response.data.result[j].month<i){
               data.push({
-                proposal_dept:"",
-                score:0,
-                monthorder:i
+                analysisDept:"",
+                avgScore:0,
+                month:i,
+                done: true
               });
             }
             else{
-              data.push(response.data[j]);
+              data.push(response.data.result[j]);
               j++;
             }
           }

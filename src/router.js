@@ -49,6 +49,10 @@ const routes = [
     path:'/adviceinfo',
     component:()=>import('./dd_report/adviceinfo.vue')
   },
+  {//专业数据分析信息详情
+    path:'/analyinfo',
+    component:()=>import('./dd_report/analyinfo.vue')
+  },
   {
     path: '/addadvice',
     component: () => import('./dd_advice/addadvice.vue'),
