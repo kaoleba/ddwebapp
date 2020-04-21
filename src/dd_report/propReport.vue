@@ -27,7 +27,7 @@
             @click="deptItemClick(item)"
             title-style="text-align:left;padding-left:20px;">
             <span slot="default">{{item.score==-1?"打分未完成":item.score}}</span>
-            <span slot="title">{{item.monthorder}}月份</span>
+            <span slot="title">{{item.monthorder === 1 ? 'LY12' : item.month-1}}月份</span>
             </van-cell>
         </van-list>
       </van-tab>
