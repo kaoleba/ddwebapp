@@ -36,8 +36,9 @@ export default {
     window.document.title = "建议详情";
     var deptid = this.$route.query.deptid;
     var monthorder = this.$route.query.monthorder;
+
     axios
-      .get(this.global.ddapi + "/proposal/AdviceInfo", {
+      .get(this.global.ddapi + "proposal/AdviceInfo", {
         params: {
           deptid: deptid,
           monthorder: monthorder

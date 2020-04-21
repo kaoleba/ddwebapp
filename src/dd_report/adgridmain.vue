@@ -2,7 +2,7 @@
 <template>
   <div>
     <van-grid>
-      <van-grid-item :icon="img5" text="建议提报排名" @click="openPage('/propReport')" />
+      <van-grid-item :icon="img5" text="建议测评排名" @click="openPage('/propReport')" />
       <van-grid-item :icon="img8" text="数据分析排名" @click="openPage('/analyReport')" />
       <van-grid-item :icon="img3" text="汇总统计排名" @click="openPage('/totalReport')" />
     </van-grid>
