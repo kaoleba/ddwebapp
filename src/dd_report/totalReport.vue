@@ -25,7 +25,7 @@
                     center
                     title-style="text-align:left;padding-left:20px;">
             <span slot="default">{{item.done===true?item.avgScore:"打分未完成"}}</span>
-            <span slot="title">{{item.month}}月份</span>
+            <span slot="title">{{item.month === 1 ? 'LY12' : item.month-1}}月份</span>
           </van-cell>
         </van-list>
       </van-tab>
@@ -48,7 +48,7 @@
     mounted: () => {
       dd.ready(function() {
         dd.biz.navigation.setTitle({
-          title: "数据分析汇总排名"
+          title: "汇总排名"
         });
       });
     },
