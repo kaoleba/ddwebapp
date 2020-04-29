@@ -12,7 +12,6 @@
         label
         label-width="15"
         type="textarea"
-        maxlength="400"
         style="line-height:18px"
       />
     </van-cell-group>

@@ -118,6 +118,11 @@ const routes = [
     meta:{"title":"领导干部推荐"}
   },
   {
+    path: '/food',
+    component: () => import('./online_food/index.vue'),
+    meta:{"title":"食堂饭菜质量评测"}
+  },
+  {
     path:"/votedetail",
     component:()=>import('./vote/vote.vue'),
     meta:{"title":"领导干部推荐"}
