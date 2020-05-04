@@ -43,7 +43,7 @@
 
       <div
         style="font-size:18px;color:#3399CC;margin:5px;margin-top:10px"
-      >{{foods.length+2}}.您对食堂餐饮满意度综合评价</div>
+      >{{foods.length+2}}.您对饭菜性价比综合评价</div>
       <div style="margin:5px;">
         <van-rate v-model="values[1]" />
       </div>
