@@ -120,7 +120,7 @@ const routes = [
   {
     path: '/food',
     component: () => import('./online_food/index.vue'),
-    meta:{"title":"食堂饭菜质量评测"}
+    meta:{"title":"机关食堂满意度测评"}
   },
   {
     path:"/votedetail",

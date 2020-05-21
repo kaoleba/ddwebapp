@@ -2,91 +2,107 @@
 <template>
   <div id="pf" ref="pfscroll" style="text-align: left" v-if="visible">
     <div
-      style="text-align: center;height:40px;font-size:20px;color:#07c160;line-height: 40px"
-    >机关职工食堂饭菜质量评测信息</div>
-    <div style="overflow-y:auto;" :style="{height: scrollerHeight}">
+      id="title"
+      style="text-align:left;height:50px;font-size:16px;;line-height: 25px;font-weight:700;margin-left:10px;margin-right:10px;margin-bottom:5px"
+    >您的评价是食堂菜品改进提升的方向和动力，非常感谢您认真完成本测评。</div>
+    <div style="overflow-y:auto;background:#EEEEEE;" :style="{height: scrollerHeight}">
       <div
         class="panel"
         v-for="(food,uindex)  in foods"
         :key="food.id"
-        style="text-align: left;padding-left:8px;padding-right:5px;margin-top:5px"
+        style="text-align: left;padding-left:8px;padding-right:5px;margin-top:9px;background:#fff;"
       >
         <van-row>
-          <van-col span="8">
-            <div style="font-size:20px;color:#0099cc">{{uindex+1}}.{{food.name}}</div>
-          </van-col>
-          <van-col span="16">
-            <img style="height:140px;width:160px" :src="food.pic" />
-          </van-col>
+          <div style="float:left;">
+            <img
+              style="height:90px;width:100px;padding:10px;border-radius: 20px;padding-left:2px"
+              :src="food.pic"
+              @click="DDimg(food.pic)"
+            />
+          </div>
+          <div>
+            <div style="font-size:18px;font-weight:700;padding-top:10px;">{{uindex+1}}.{{food.name}}</div>
+            <div style="margin-top:8px;display:inline-flex">
+              <font style>喜爱度：</font>
+              <van-rate v-model="food.value1"  :disabled="save"/>
+              <div
+                style="float:right;;margin-left:10px;font-size:16px;color:#FFCC33"
+              >{{getPingjia(food.value1)}}</div>
+            </div>
+
+            <div style="margin-top:8px;display:inline-flex">
+              色香味：
+              <van-rate v-model="food.value2" :disabled="save"/>
+              <div
+                style="float:right;;margin-left:10px;font-size:16px;color:#FFCC33"
+              >{{getPingjia(food.value2)}}</div>
+            </div>
+          </div>
         </van-row>
+      </div>
+      <div style="background:#fff;">
+        <div
+          style="font-size:18px;font-size:18px;font-weight:700;margin-top:10px;margin-left:15px;padding-top:10px"
+        >{{foods.length+1}}.您对食堂员工服务态度评价</div>
+        <div style="margin:5px;margin-left:15px;display:inline-flex">
+          <van-rate v-model="values[0]" :disabled="save"/>
+          <div
+            style="float:right;;margin-left:10px;font-size:16px;color:#FFCC33"
+          >{{getPingjia(values[0])}}</div>
+        </div>
 
-        <van-row style="margin-top:7px;color:#FF9966">
-          <van-col span="8">综合评价：</van-col>
-          <van-col span="16">
-            <van-rate v-model="food.value1" />
-          </van-col>
-        </van-row>
-        <van-row style="margin-top:7px;color:#FF9966;margin-bottom:15px">
-          <van-col span="8">色香味：</van-col>
-          <van-col span="16">
-            <van-rate v-model="food.value2" />
-          </van-col>
-        </van-row>
-      </div>
+        <div
+          style="font-size:18px;font-size:18px;font-weight:700;margin-top:10px;margin-left:15px"
+        >{{foods.length+2}}.您对饭菜性价比综合评价</div>
+        <div style="margin:5px;margin-left:15px;display:inline-flex">
+          <van-rate v-model="values[1]" :disabled="save"/>
+          <div
+            style="float:right;;margin-left:10px;font-size:16px;color:#FFCC33"
+          >{{getPingjia(values[1])}}</div>
+        </div>
+        <div
+          style="font-size:18px;font-size:18px;font-weight:700;margin-top:10px;margin-left:15px"
+        >{{foods.length+3}}.您对食堂餐饮满意度综合评价</div>
+        <div style="margin:5px;margin-left:15px;display:inline-flex">
+          <van-rate v-model="values[2]" :disabled="save" />
+          <div
+            style="float:right;;margin-left:10px;font-size:16px;color:#FFCC33"
+          >{{getPingjia(values[2])}}</div>
+        </div>
 
-      <div
-        style="font-size:18px;color:#3399CC;margin:5px;margin-top:10px"
-      >{{foods.length+1}}.您对食堂员工服务态度评价：</div>
-      <div style="margin:5px;">
-        <van-rate v-model="values[0]" />
-      </div>
+        <div
+          style="font-size:18px;font-size:18px;font-weight:700;margin-top:10px;margin-left:15px"
+        >{{foods.length+4}}.推荐一道您喜欢的家常菜或时令菜</div>
+        <div style="margin:5px;">
+          <van-field
+            v-model="values[3]"
+            rows="3"
+            label-width="0"
+            autosize
+            type="textarea"
+            maxlength="150"
+            show-word-limit
+            placeholder="(选填)请输入内容"
+            :disabled="save"
+          />
+        </div>
 
-      <div
-        style="font-size:18px;color:#3399CC;margin:5px;margin-top:10px"
-      >{{foods.length+2}}.您对饭菜性价比综合评价</div>
-      <div style="margin:5px;">
-        <van-rate v-model="values[1]" />
-      </div>
-
-      <div
-        style="font-size:18px;color:#3399CC;margin:5px;margin-top:10px"
-      >{{foods.length+3}}.您对食堂餐饮满意度综合评价</div>
-      <div style="margin:5px;">
-        <van-rate v-model="values[2]" />
-      </div>
-
-      <div style="font-size:18px;color:#3399CC;margin:5px;margin-top:10px">
-        {{foods.length+4}}.推荐一道您喜欢的家常菜或时令菜
-        <div style="color:red">（选填）</div>
-      </div>
-      <div style="margin:5px;">
-        <van-field
-          v-model="values[3]"
-          rows="3"
-          label-width="0"
-          autosize
-          type="textarea"
-          maxlength="150"
-          show-word-limit
-          placeholder="请输入内容"
-        />
-      </div>
-
-      <div style="font-size:18px;color:#3399CC;margin:5px;margin-top:10px">
-        {{foods.length+5}}.您对食堂饭菜提升等方面有何建议
-        <div style="color:red">（选填）</div>
-      </div>
-      <div style="margin:5px;">
-        <van-field
-          v-model="values[4]"
-          rows="3"
-          label-width="0"
-          autosize
-          type="textarea"
-          maxlength="150"
-          show-word-limit
-          placeholder="请输入内容"
-        />
+        <div
+          style="font-size:18px;font-size:18px;font-weight:700;margin-top:10px;margin-left:15px"
+        >{{foods.length+5}}.您对食堂饭菜提升等方面有何建议</div>
+        <div style="margin:5px;">
+          <van-field
+            v-model="values[4]"
+            rows="3"
+            label-width="0"
+            autosize
+            type="textarea"
+            maxlength="150"
+            show-word-limit
+            placeholder="(选填)请输入内容"
+            :disabled="save"
+          />
+        </div>
       </div>
     </div>
     <van-button :disabled="save" style="font-size:18px" type="primary" @click="btnConfirm" block>提交</van-button>
@@ -135,7 +151,7 @@ export default {
     let _this = this;
 
     _this.questionid = _this.$route.query.questionid;
-    _this.getValues("05273505221222370");
+    //_this.getValues("05273505221222370");
 
     dd.ready(function() {
       dd.ui.webViewBounce.disable();
@@ -210,39 +226,57 @@ export default {
           Toast.clear();
         });
     },
+    DDimg(img) {
+      dd.ready(function() {
+        dd.biz.util.previewImage({
+          urls: [img], //图片地址列表
+          current: img //当前显示的图片链接
+        });
+      });
+    },
+    getPingjia: function(value) {
+      if (value == 1) value = "差";
+      if (value == 2) value = "一般";
+      if (value == 3) value = "较好";
+      if (value == 4) value = "好";
+      if (value == 5) value = "特好";
+      if (value == 0) value = "";
+      return value;
+    },
     btnConfirm() {
       let _this = this;
-      var flag=false;
+      var flag = false;
       for (var i = 0; i < _this.foods.length; i++) {
         if (_this.foods[i].value1 == 0 || _this.foods[i].value2 == 0) {
           Dialog.alert({
             title: "提示",
             message: "完成评价后再提交！"
           }).then(() => {});
-          flag=true;
+          flag = true;
           return;
-         
         }
       }
 
-      if(flag)
-      return;
+      if (flag) return;
 
-      if(_this.values[0]==0||_this.values[1]==0||_this.values[2]==0)
-      {
-         Dialog.alert({
-            title: "提示",
-            message: "完成评价后再提交！"
-          }).then(() => {});
-          return;
+      if (
+        _this.values[0] == 0 ||
+        _this.values[1] == 0 ||
+        _this.values[2] == 0
+      ) {
+        Dialog.alert({
+          title: "提示",
+          message: "完成评价后再提交！"
+        }).then(() => {});
+        return;
       }
 
-    Toast.loading({
-      message: "提交中...",
-      loadingType: "spinner",
-      duration: 0
-    });
-    
+      Toast.loading({
+        message: "提交中...",
+        loadingType: "spinner",
+        duration: 0
+      });
+
       axios
         .post(this.global.ddapi + "Foods/SaveFoods", {
           questionid: _this.questionid,
@@ -269,7 +303,7 @@ export default {
   },
   computed: {
     scrollerHeight: function() {
-      return window.innerHeight - 80 + "px";
+      return window.innerHeight - 100 + "px";
     }
   }
 };

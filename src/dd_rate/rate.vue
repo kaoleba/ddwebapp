@@ -144,7 +144,7 @@
         background="#ecf9ff"
         left-icon="medal-o"
       >最终得分：{{valueadd}}</van-notice-bar>
-    </div> -->
+    </div>-->
     <van-row>
       <van-col span="24">
         <div>
@@ -201,8 +201,10 @@ export default {
       this.host_dept = entity.host_dept;
       this.assisting_dept = entity.assisting_dept;
       this.host_user = entity.host_user;
-      this.score1 = String(entity.score1);
-      this.score2 = String(entity.score2);
+      if (entity.score1 != null) {
+        this.score1 = String(entity.score1);
+        this.score2 = String(entity.score2);
+      }
     }
   },
   data() {

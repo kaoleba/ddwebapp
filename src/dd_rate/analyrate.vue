@@ -74,7 +74,7 @@
     </div>
 
     <div class="panel" style="text-align: left;padding-left:18px;margin-top:5px">
-      <van-panel style="color:red" title="思路方法"></van-panel>
+      <van-panel style="color:red" title="问题剖析"></van-panel>
     </div>
     <div style="text-align: center;font-size:13px;margin-top:5px">
       <van-row>
@@ -132,7 +132,7 @@
     </div>
 
     <div class="panel" style="text-align: left;padding-left:18px;margin-top:5px">
-      <van-panel style="color:red" title="分析效用"></van-panel>
+      <van-panel style="color:red" title="提升措施"></van-panel>
     </div>
     <div style="text-align: center;font-size:13px;margin-top:5px">
       <van-row>
@@ -189,7 +189,7 @@
       </div>
     </div>
 
-    <div class="panel" style="text-align: left;padding-left:18px;margin-top:5px">
+    <!-- <div class="panel" style="text-align: left;padding-left:18px;margin-top:5px">
       <van-panel style="color:red" title="解决问题"></van-panel>
     </div>
     <div style="text-align: center;font-size:13px;margin-top:5px">
@@ -303,7 +303,7 @@
           </van-row>
         </van-radio-group>
       </div>
-    </div>
+    </div> -->
 
 
     <van-row>
@@ -359,11 +359,14 @@ export default {
       this.analysis_title = entity.analysis_title;
       this.analysis_content = entity.analysis_content;
       this.analysis_dept = entity.analysis_dept;
+      if(entity.score1!=null)
+      {
       this.score1 = String(entity.score1);
       this.score2 = String(entity.score2);
       this.score3 = String(entity.score3);
       this.score4 = String(entity.score4);
       this.score5 = String(entity.score5);
+      }
     }
   },
   data() {
@@ -377,8 +380,8 @@ export default {
       score1: "",
       score2: "",
       score3: "",
-      score4: "",
-      score5: ""
+      score4: 0,
+      score5: 0
     };
   },
   methods: {
@@ -386,7 +389,7 @@ export default {
       this.$router.go(-1);
     },
     btnConfirm() {
-      if (this.score1 == "" || this.score2 == ""| this.score3 == ""| this.score4 == ""| this.score5 == "") {
+      if (this.score1 == "" || this.score2 == ""||this.score3 == ""||this.score4 == ""||this.score5 == "") {
         utils.AlertError("请先完成打分");
         return;
       }
@@ -404,8 +407,8 @@ export default {
             score1: _this.score1,
             score2: _this.score2,
             score3: _this.score3,
-            score4: _this.score4,
-            score5: _this.score5
+            score4:0,
+            score5:0
           })
           .then(function(response) {
             //alert(JSON.String(response));
