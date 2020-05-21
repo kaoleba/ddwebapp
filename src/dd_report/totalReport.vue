@@ -25,7 +25,7 @@
                     center
                     title-style="text-align:left;padding-left:20px;">
             <span slot="default">{{item.done===true?item.avgScore:"打分未完成"}}</span>
-            <span slot="title">{{item.month === 1 ? 'LY12' : item.month-1}}月份</span>
+            <span slot="title">{{ item.year }} 年第 {{ item.quarter }}季度</span>
           </van-cell>
         </van-list>
       </van-tab>
@@ -51,10 +51,22 @@
           title: "汇总排名"
         });
       });
+      Date.prototype.getQuarter = function() {
+        var month = this.getMonth() + 1;
+        if(month  < 3) {
+          return '1';
+        }else if(month < 6) {
+          return '2';
+        }else if(month <9) {
+          return '3';
+        }else if(month <12) {
+          return '4';
+        }
+      };
     },
     methods: {
       loadMonthReport: function() {
-        axios.get(this.global.javaapi+"/monthScoreAllList").then(response=>{
+        axios.get(this.global.javaapi+"/quarterScoreAllList").then(response=>{
           if(response.data.code !== 0){
             Toast("程序错误!请联系管理员");
             return;
@@ -78,14 +90,15 @@
           }
           if(response.data){
             let data=[];
-            let m=new Date().getMonth()+1;
+            let m=new Date().getQuarter();
             let i,j;
             for(i=m,j=0;i>0;i--){
               if(response.data.result === null || j>=response.data.result.length||response.data.result[j].month<i){
                 data.push({
                   analysisDept:"",
                   avgScore:0,
-                  month:i,
+                  quarter: i,
+                  year: new Date().getFullYear(),
                   done: true
                 });
               }

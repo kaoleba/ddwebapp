@@ -29,12 +29,12 @@
         created: function() {
             window.document.title = "专业数据分析详情";
             var deptId = this.$route.query.deptId;
-            var month = this.$route.query.month;
+            var quarter = this.$route.query.quarter;
             axios
                 .get(this.global.javaapi + "/dataAnalysisInfo", {
                     params: {
                         deptId: deptId,
-                        month: month
+                        quarter: quarter
                     }
                 })
                 .then(response => {
