@@ -10,7 +10,7 @@ var ddapi='http://221.2.76.14:8056/api/'
 //var adviceurl='http://xrf62u.natappfree.cc/#/advicemain/advicelist'
 //var rateurl='http://xrf62u.natappfree.cc/#/ratemain/ratelist'
 //var rateurl='http://dataanalysis.vaiwan.com/#/ratemain/ratelist'
-//var javaapi='http://localhost:8081/lk-score/score/ranking';
+//var javaapi='http://localhost:8081/lk_score/score/ranking';
 //var ddapi='https://localhost:44392/api/'
 
 var CorpId='ding50a1c2db19b1feb035c2f4657eb6378f'
