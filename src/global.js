@@ -15,6 +15,7 @@ var ddapi='http://221.2.76.14:8056/api/'
 
 var CorpId='ding50a1c2db19b1feb035c2f4657eb6378f'
 var agentId='350136488'
+var imageurl='http://221.2.76.14:8056/images/'
 
 export default {
   ddapi,
@@ -22,6 +23,7 @@ export default {
   rateurl,
   javaapi,
   CorpId,
-  agentId
+  agentId,
+  imageurl
 };
 

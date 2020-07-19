@@ -1,4 +1,13 @@
 
+//获取前一天
+function getNextDate(day) { 
+  var dd = new Date();
+  dd.setDate(dd.getDate() + day);
+  var y = dd.getFullYear();
+  var m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
+  var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();
+  return y + "-" + m + "-" + d;
+}
 
 //获取当前时间戳
 function getTimeStamp() {
@@ -137,7 +146,8 @@ function getTimeStamp() {
     getTimeStamp: getTimeStamp,
     transTimeToStamp: transTimeToStamp,
     getTime: getTime,
-    mGetDate:mGetDate
+    mGetDate:mGetDate,
+    getNextDate:getNextDate
   }
   
   

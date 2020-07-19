@@ -16,7 +16,7 @@
       />
     </van-cell-group>
     <div class="panel" style="text-align: left;padding-left:18px;">
-      <van-panel style="color:red" title="数据质量"></van-panel>
+      <van-panel style="color:red" title="数据质量" desc="重点依托“5+N”平台开展专业分析，确保数据来源真实、准确和客观。在统计分析基础上，运用建模分析和算法分析方式，做到分析数据具有指导生产经营管理决策价值。"></van-panel>
     </div>
     <div style="text-align: center;font-size:13px;margin-top:5px">
       <van-row>
@@ -74,7 +74,7 @@
     </div>
 
     <div class="panel" style="text-align: left;padding-left:18px;margin-top:5px">
-      <van-panel style="color:red" title="问题剖析"></van-panel>
+      <van-panel style="color:red" title="问题剖析" desc="坚持问题导向、需求导向，以对重点工作的数据化解析为基础，揭示存在问题，剖析问题成因,实现对运营管理现状和趋势的预测预知预警预判。"></van-panel>
     </div>
     <div style="text-align: center;font-size:13px;margin-top:5px">
       <van-row>
@@ -132,7 +132,7 @@
     </div>
 
     <div class="panel" style="text-align: left;padding-left:18px;margin-top:5px">
-      <van-panel style="color:red" title="提升措施"></van-panel>
+      <van-panel style="color:red" title="提升措施" desc="坚持“用数据说话、用数据决策、用数据管理、用数据创新”的大数据管理理念，结合分析形成有效措施，促进专业提升、产业发展。"></van-panel>
     </div>
     <div style="text-align: center;font-size:13px;margin-top:5px">
       <van-row>
@@ -389,7 +389,8 @@ export default {
       this.$router.go(-1);
     },
     btnConfirm() {
-      if (this.score1 == "" || this.score2 == ""||this.score3 == ""||this.score4 == ""||this.score5 == "") {
+
+      if (this.score1 == "" || this.score2 == ""||this.score3 == "") {
         utils.AlertError("请先完成打分");
         return;
       }
